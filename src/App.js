@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-
+import MainApp from './components/MainApp'
 
 function App() {
   return (
     <div className="App">
-      Live Polling
+      <MainApp></MainApp>
     </div>
   );
 }
