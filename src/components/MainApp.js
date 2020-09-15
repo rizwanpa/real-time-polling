@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getPoll } from "./../actions/index";
+import { Route, Switch, Link, BrowserRouter as Router} from 'react-router-dom';
 import { Layout, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -9,7 +9,7 @@ import {
   AreaChartOutlined,
   PieChartOutlined
 } from "@ant-design/icons";
-import { Route, Switch, Link, BrowserRouter as Router} from 'react-router-dom';
+import { getPoll } from "./../actions/index";
 import { history } from '../store';
 import Dashboard from './Dashboard'
 import CreatePoll from './CreatePoll'
@@ -21,6 +21,7 @@ class MainApp extends Component {
   state = {
     collapsed: false
   };
+  
 
   toggle = () => {
     this.setState({
@@ -67,7 +68,7 @@ class MainApp extends Component {
                   minHeight: 280
                 }}
               >
-                <Switch>
+                <Switch>                  
                   <Route exact path='/dashboard' component={Dashboard} />
                   <Route exact path='/create-poll' component={CreatePoll} />
                   <Route exact path='/polls' component={ListPoll} />

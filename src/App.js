@@ -2,12 +2,12 @@ import React from "react";
 import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
-import MainApp from "./components/MainApp";
+import Auth from "./components/Auth";
 
 function App() {
   return (
     <Provider store={store}>
-      <MainApp></MainApp>
+      <Auth></Auth>
     </Provider>
   );
 }
