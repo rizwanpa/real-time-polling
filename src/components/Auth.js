@@ -11,7 +11,7 @@ class Auth extends Component {
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route exact path="/" component={MainApp} />
+          <Route path="/" component={MainApp} />
         </Switch>
       </Router>
     );

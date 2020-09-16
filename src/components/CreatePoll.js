@@ -52,7 +52,7 @@ class CreatePoll extends Component {
     axios.defaults.headers.common["Authorization"] =
       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjAwMTY4NDI1LCJleHAiOjE2MDAyNTQ4MjV9.6ZOPCwdDJSsahqBqNtRUc23q_TRII9mEFOIhXSVAHA8";
     axios
-      .post(`https://localhost:3030/polls/`, {
+      .post(`http://localhost:3030/polls/`, {
         ...pollData,
         start_date,
         end_date,
