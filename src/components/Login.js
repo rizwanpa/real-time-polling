@@ -12,16 +12,12 @@ class Login extends Component {
     //this.props.history.push("/");
   }
   componentWillReceiveProps(nextProps) {
-    console.log('next+++++',nextProps.user.name);
     // if(nextProps.user.name)
     //     this.props.history.push("/");
     // else
     //     this.props.history.push("/login");
   }
   componentDidUpdate(prevProps){
-      console.log('componentDidUpdate--->',prevProps,this.props);
-      console.log(prevProps.user.errors.code != this.props.user.errors.code);
-      console.log('cosnditions',prevProps.user.errors.code !== 1);
       if(prevProps.user.username != this.props.user.username){
           if(this.props.user.errors.code !== 1 ){
             this.props.history.push("/"); 
@@ -31,14 +27,11 @@ class Login extends Component {
       }
   }
   onFinishFailed = errorInfo => {
-    console.log("Failed:", errorInfo);
   };
   onFinish = values => {
-    console.log("Success:", values);
     this.props.setSecurity(values);
   };
   render() {
-    console.log("login props--->", this.props);
     const layout = {
       labelCol: {
         span: 8
@@ -117,7 +110,6 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("login-->", state);
   return { user : state.user };
 };
 const mapDispatchToProps = {

@@ -43,9 +43,6 @@ class CreatePoll extends Component {
   formTitleRef = createRef();
 
   savePoll(pollData) {
-    console.log("new poll", pollData);
-    console.log("epoch time", moment.unix(pollData.start_date));
-    console.log("epoch time", pollData.start_date.unix());
     let start_date = pollData.start_date.unix();
     let end_date = pollData.end_date.unix();
     //return false;
@@ -59,14 +56,12 @@ class CreatePoll extends Component {
         status: "published"
       })
       .then(res => {
-        console.log("res ---->", res);
       });
   }
 
   render() {
     let questionArr = [1, 2];
     const onFinish = pollData => {
-      console.log("Received options of poll:", pollData.options);
       this.savePoll(pollData);
     };
     return (
@@ -129,7 +124,6 @@ class CreatePoll extends Component {
           {/* This is the Dynamic questions Adder */}
           <Form.List name="questions">
             {(fields, { add, remove }) => {
-              console.log("===>", fields, add, remove);
               return (
                 <div>
                   {fields.map(field => (
@@ -162,7 +156,6 @@ class CreatePoll extends Component {
                             }}
                             onClick={() => {
                               remove(field.name);
-                              console.log(field);
                             }}
                           />
                         </span>
@@ -277,7 +270,6 @@ class CreatePoll extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("CreatePoll-->", state);
   return { ...state };
 };
 

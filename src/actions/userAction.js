@@ -24,7 +24,6 @@ export const prolongSessionAction = (data) =>{
 }
 
 export const setSecurity = (data) => {
-    console.log('user-->',data);
     return (dispatch) => {
         //API call
         let user = {id:1234,name:'admin',email:'admin@example.com'};

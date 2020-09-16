@@ -11,7 +11,6 @@ class ListPoll extends Component{
 }
 
 const mapStateToProps = state => {
-  console.log("ListPoll-->", state);
   return { ...state };
 };
 

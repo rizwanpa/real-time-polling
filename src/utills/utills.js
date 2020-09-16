@@ -91,7 +91,6 @@ export function submitFSLRecord(url, params) {
   return axios
     .put(url, params)
     .then((result) => {
-      console.log();
       response.data = result.data;
       response.errorCode = 0;
       response.error = {};

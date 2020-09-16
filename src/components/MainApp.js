@@ -30,7 +30,6 @@ class MainApp extends Component {
   };
 
   render() {
-    console.log("main render-->", this.props);
     let pathname = this.props.router.location.pathname;
     return (
       <Router history={history}>
@@ -82,7 +81,6 @@ class MainApp extends Component {
   }
 }
 const mapStateToProps = state => {
-  console.log("MainApp-->", state);
   return { ...state };
 };
 const mapDispatchToProps = {

@@ -6,7 +6,6 @@ import MainApp from "./MainApp";
 class Auth extends Component {
   state = {};
   render() {
-    console.log("inside Auth props", this.props);
     return (
       <Router>
         <Switch>
