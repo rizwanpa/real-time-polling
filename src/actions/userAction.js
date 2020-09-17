@@ -1,3 +1,6 @@
+import jwt from 'jwt-decode';
+import {login} from './../utills/utills';
+import {API_SERVER} from './../constants/appConfig';
 /* 
 action type
 */
@@ -24,15 +27,13 @@ export const prolongSessionAction = (data) =>{
 }
 
 export const setSecurity = (data) => {
-    return (dispatch) => {
+    return async (dispatch) => {
         //API call
-        let user = {id:1234,name:'admin',email:'admin@example.com'};
-        if(data.username !=='admin'){
-            user = {id:'',name:'',email:'',errors : {
-                code : 1,
-                messaget : 'Access Failed'
-            }};
-        }
+        let userDetails = await login(`/login`,data);
+        let accessToken = (userDetails !== undefined && userDetails.data !==  undefined && userDetails.data.accessToken !==  undefined ) ? userDetails.data.accessToken : '';
+        
+        sessionStorage.setItem('accessToken', accessToken);
+        let user = accessToken !== '' ? jwt(accessToken): {};
         dispatch(setSecurityAction(user));
     }
 }

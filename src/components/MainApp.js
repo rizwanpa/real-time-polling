@@ -64,10 +64,12 @@ class MainApp extends Component {
                 style={{
                   margin: "24px 16px",
                   padding: 24,
-                  minHeight: 280
+                  minHeight: 280,
+                  overflow: 'auto'
                 }}
               >
                 <Switch>                  
+                  <Route exact path='/' component={CreatePoll} />{/* add dashboard */}
                   <Route exact path='/dashboard' component={Dashboard} />
                   <Route exact path='/create-poll' component={CreatePoll} />
                   <Route exact path='/polls' component={ListPoll} />

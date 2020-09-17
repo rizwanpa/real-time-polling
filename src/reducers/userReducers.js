@@ -8,8 +8,7 @@ import {
 
 const defaultState = {
   username: null,
-  jwt: "",
-  roles: [],
+  id: '',
   errors: {}
 };
 
@@ -19,10 +18,8 @@ export default (state = initialState, actions) => {
     case SET_SESSION:
       return {
         ...state,
+        id: actions.data.id,
         username: actions.data.name,
-        jwt: actions.data.jwt,
-        email: actions.data.email,
-        roles: actions.data.role,
         errors: {}
       };
     case SET_SESSION_EXPIRED:

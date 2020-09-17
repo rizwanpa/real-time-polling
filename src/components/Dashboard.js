@@ -1,32 +1,30 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import axios from 'axios';
-import './css/Dashboard.css'
+import "./css/Dashboard.css";
+import { getPollAnalytics } from "./../actions";
 
-class Dashboard extends Component{
+class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      polls:[]
-    }
+      polls: []
+    };
   }
 
   componentDidMount() {
-    this.getPollData();
+    let params = {
+      status: "published",
+      sort: "",
+      order: "",
+      limit: 5,
+      fromDate: "",
+      endDate: "",
+      title: ""
+    };
+    this.props.getPollAnalyticsAction(params);
   }
 
-  getPollData () {
-    let request = {
-
-    }
-    axios.get('/', request).then((response) => {
-      this.setState({
-        polls: response.data.polls
-      })
-    })
-  }
-
-  goToSurvey(poll)  {
+  goToSurvey(poll) {
     console.log(poll.uuid);
   }
 
@@ -34,7 +32,7 @@ class Dashboard extends Component{
     return (
       <div className="dashboard">
         <div className="polls">
-          {this.state.polls.map((poll, index) => 
+          {this.props.pollsAnalytics.map((poll, index) => 
             <div className="poll" key={index} onClick={ () => this.goToSurvey(poll)}>
               <div className="poll-info">
                 <p>{poll.title}</p>
@@ -51,17 +49,19 @@ class Dashboard extends Component{
                 </div>
               </div>
             </div>
-          )}
+          ) }
         </div>
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = state => {
-  return { ...state };
+  return { pollsAnalytics : state.dashboard.pollsAnalytics };
 };
 
-export default connect(
-  mapStateToProps
-)(Dashboard);
+const mapDispatchToProps =  {
+  getPollAnalyticsAction: getPollAnalytics
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

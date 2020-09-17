@@ -1,5 +1,6 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
+import _ from 'lodash';
 import "./css/CreatePoll.css";
 import {
   Divider,
@@ -9,18 +10,27 @@ import {
   Radio,
   Space,
   DatePicker,
-  Row
+  Row,
+  message,
+  Modal
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import OptionForm from "./OptionForm";
 import axios from "axios";
 import moment from "moment";
+import {BASE_URL} from './../constants/appConfig';
+import fbIcon from './../icons/fbIcon.png';
+import instagramIcon from './../icons/instagramIcon.png';
+import twitterIcon from './../icons/twitterIcon.png'
 const { TextArea } = Input;
 
 class CreatePoll extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modalVisible: false,
+      modalTitle: ''
+    };
   }
 
   formItemLayout = {
@@ -43,21 +53,60 @@ class CreatePoll extends Component {
   formTitleRef = createRef();
 
   savePoll(pollData) {
+    console.log('SavePolls--->',pollData);
     let start_date = pollData.start_date.unix();
     let end_date = pollData.end_date.unix();
+    let status = pollData.status;
+    if(status !== '' && status === 'published'){
+      console.log('inside published');
+      let {questions} = pollData;
+      if(_.isNil(questions) || Object.keys(questions).length == 0){
+        console.log('Questons error');
+        message.error('Atleast one question is required to publish poll');
+        return false;
+      }
+      if(!_.isNil(questions) && Object.keys(questions).length){
+        for(let i = 0; i < Object.keys(questions).length; i++){
+          if(_.isNil(questions[i].options) || Object.keys(questions[i].options).length == 0){
+            message.error('Options are missing');
+            return false;
+          }
+        }
+      }
+    }
     //return false;
     axios.defaults.headers.common["Authorization"] =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjAwMTY4NDI1LCJleHAiOjE2MDAyNTQ4MjV9.6ZOPCwdDJSsahqBqNtRUc23q_TRII9mEFOIhXSVAHA8";
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjAwMzE2NDg0LCJleHAiOjE2MDA0MDI4ODR9.EczrkagmfcoeqmBLLBQL9A7I8_mE59hsBtHjSGdMCa0";
     axios
       .post(`http://localhost:3030/polls/`, {
         ...pollData,
         start_date,
-        end_date,
-        status: "published"
+        end_date
       })
       .then(res => {
+        console.log(res);
+        let modalData = {
+          title : res.data.poll.title,
+          uuid : res.data.poll.uuid,
+
+        }
+        this.showModal(modalData);
       });
   }
+  showModal = (modalData) => {
+    this.setState({
+      modalVisible: true,
+      modalTitle : modalData.title || '',
+      uuid : modalData.uuid,
+    });
+  };
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+      modalTitle:''
+    });
+  };
 
   render() {
     let questionArr = [1, 2];
@@ -255,15 +304,38 @@ class CreatePoll extends Component {
               />
             </Form.Item>
           </Row>
+          <Form.Item name="status" className="collection-create-form_last-form-item" initialValue='draft'>
+          <Radio.Group>
+            <Radio value="draft">Save as draft</Radio>
+            <Radio value="published">Publish</Radio>
+          </Radio.Group>
+        </Form.Item>
 
           {/* <FormAction> */}
           <div className="inner-wrapper">
             <Button type="primary" htmlType="submit">
-              Save as draft
+              Submit Poll
             </Button>
           </div>
           {/* </FormAction> */}
         </Form>
+      <Modal
+        title={this.state.modalTitle}
+        centered
+        visible={this.state.modalVisible}
+        onOk={this.handleOk}
+        cancelButtonProps={{ display: 'none' }}
+        width={500}
+      >
+        <deckgo-qrcode content={`${BASE_URL}/${this.state.uuid}`}></deckgo-qrcode>
+        <div className='pollUrl'>{`${BASE_URL}/${this.state.uuid}`}</div>
+        <div className='padding10'>{`Poll Code - ${this.state.uuid}`}</div>
+        <div className="icons">
+          <img src={fbIcon} alt="share-facebook"/>
+          <img src={instagramIcon} alt="share-instagram"/>
+          <img src={twitterIcon} alt="share-twitter"/>
+        </div>
+      </Modal>
       </div>
     );
   }

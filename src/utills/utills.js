@@ -5,9 +5,58 @@ import { push } from 'connected-react-router'
 import _ from 'lodash';
 import store from './../store';
 
+export function login(url, params){
+  let response = {
+    data: {},
+    error: {},
+    errorCode: 0
+  }
+  return axios
+  .post(url, params)
+  .then(response=>{
+    console.log('utils resposne');
+    axios.defaults.headers.common['Authorization'] = response.data.accessToken;
+    return response;
+  })
+  .catch(err=>{
+    response.data = {};
+      response.error = err;
+      response.errorCode = 1;
+      if (!_.isUndefined(err.response) && err.response.status === 401) {
+        //store.dispatch(setSessionExpired(true));
+        store.dispatch(push('/login'));
+      }
+      return (response);
+  })
+}
 
+export function postData(url, params) {
+  let accessToken = sessionStorage.getItem("accessToken");
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  let response = {
+    data: {},
+    error: {},
+    errorCode: 0
+  }
+  return axios
+    .post(url, params)
+    .then((response) => {      
+      return (response);
+    })
+    .catch((err) => {
+      response.data = {};
+      response.error = err;
+      response.errorCode = 1;
+      if (!_.isUndefined(err.response) && err.response.status === 401) {
+        //store.dispatch(setSessionExpired(true));
+        store.dispatch(push('/login'));
+      }
+      return (response);
+    });
+}
+/* 
 export function getData(url) {
-  /* store.dispatch(setLoadingState(true)); */
+  // store.dispatch(setLoadingState(true));
   axios.defaults.headers.common['Authorization'] = getState().user.jwt;
   let response = {
     data: {},
@@ -18,7 +67,7 @@ export function getData(url) {
   return axios
     .get(`${url}`)
     .then(function (result) {
-      /* store.dispatch(setLoadingState(false)); */
+      //store.dispatch(setLoadingState(false));
       store.dispatch(prolongSession(result.config.headers.Authorization));
       // return (result.data||{}).response;
       response.data = result.data;
@@ -49,32 +98,6 @@ export function getData(url) {
         openNotificationWithIcon('error', notyData);
       }
       if (!_.isNil(err && err.response) && err.response.status === 401) {
-        store.dispatch(setSessionExpired(true));
-        store.dispatch(push('/login'));
-      }
-      return (response);
-    });
-}
-
-export function submitData(url, params) {
-  let response = {
-    data: {},
-    error: {},
-    errorCode: 0
-  }
-  return axios
-    .post(url, params)
-    .then((result) => {
-      response.data = result.data;
-      response.errorCode = 0;
-      response.error = {};
-      return (response);
-    })
-    .catch((err) => {
-      response.data = {};
-      response.error = err;
-      response.errorCode = 1;
-      if (!_.isUndefined(err.response) && err.response.status === 401) {
         store.dispatch(setSessionExpired(true));
         store.dispatch(push('/login'));
       }
@@ -122,4 +145,4 @@ export function submitFSLRecord(url, params) {
       }
       return (response);
     });
-}
+} */

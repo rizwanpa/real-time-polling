@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@deckdeckgo/qrcode": "^2.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -11,6 +12,7 @@
     "connected-react-router": "^6.8.0",
     "core-js": "^3.6.5",
     "history": "^5.0.0",
+    "jwt-decode": "^3.0.0-beta.2",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "react": "^16.13.1",
