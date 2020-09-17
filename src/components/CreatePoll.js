@@ -181,7 +181,7 @@ class CreatePoll extends Component {
             {(fields, { add, remove }) => {
               return (
                 <div>
-                  {fields.map(field => (
+                  {fields.map((field, index) => (
                     <Space
                       key={field.key}
                       style={{ display: "block", marginBottom: 8 }}
@@ -203,7 +203,7 @@ class CreatePoll extends Component {
                               //margin: "8px 0",
                               boxSizing: "border-box"
                             }}
-                            placeholder="Question"
+                            placeholder={"Question "+ (index+1)}
                           />
                           <MinusCircleOutlined
                             style={{
@@ -218,7 +218,7 @@ class CreatePoll extends Component {
 
                       {/* This is the Dynamic options Adder */}
 
-                      <Form.Item>
+                      <Form.Item style={{marginLeft: "2em"}}>
                         <OptionForm fieldKey={field.key} />
                       </Form.Item>
 
@@ -228,13 +228,14 @@ class CreatePoll extends Component {
                         fieldKey={[field.fieldKey, "type"]}
                         label="Type"
                         initialValue={0}
+                        style={{marginLeft: "2em"}}
                       >
                         <Radio.Group style={{
-                        width: "100%",
-                        padding: "5px 10px",
-                        margin: "8px 0",
-                        boxSizing: "border-box"
-                      }}>
+                          width: "100%",
+                          padding: "5px 10px",
+                          margin: "8px 0",
+                          boxSizing: "border-box"
+                        }}>
                           <Radio.Button value={0}>Single</Radio.Button>
                           <Radio.Button value={1}>Multiple</Radio.Button>
                         </Radio.Group>

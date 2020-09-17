@@ -53,3 +53,7 @@
   padding: 50px;
   width: 50%;
 }
+
+.login-background {
+  min-height: 100%;
+}

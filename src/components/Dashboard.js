@@ -37,22 +37,27 @@ class Dashboard extends Component {
       <div className="dashboard">
         <div className="polls">
           {this.props.pollsAnalytics.map((poll, index) => 
-            <div className="poll" key={index} onClick={ () => this.goToSurvey(poll)}>
-              <div className="poll-info">
-                <p>{poll.title}</p>
-                <p className="poll-desc">{poll.description}</p>
-              </div>
-              <div className="poll-response">
-                <div className="questions">
-                  <p className="text-center">{poll.questions.length}</p>  
-                  <p>Questions</p>
+            <>
+              <div className="poll" key={index} onClick={ () => this.goToSurvey(poll)}>
+                <div className="poll-info">
+                  <p>{poll.title}</p>
+                  <p className="poll-desc">{poll.description}</p>
                 </div>
-                <div className="responses">
-                  <p className="text-center">{poll.totalResponses}</p>  
-                  <p>Responses</p>
+                <div className="poll-response">
+                  <div className="questions">
+                    <p className="text-center">{poll.questions.length}</p>  
+                    <p>Questions</p>
+                  </div>
+                  <div className="responses">
+                    <p className="text-center">{poll.totalResponses}</p>  
+                    <p>Responses</p>
+                  </div>
                 </div>
               </div>
-            </div>
+              <div key={index+'-'+1} className="poll-details" style={poll.expanded?{display:'block'}:{display:'none'}}>
+                hola
+              </div>
+            </>
           ) }
         </div>
       </div>
