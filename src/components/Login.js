@@ -13,7 +13,7 @@ class Login extends Component {
   };
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log("accessToken000", accessToken);
+    console.log("accessToken000", accessToken, accessToken !== null,accessToken !== "" && accessToken !== null && accessToken !== undefined);
     if (accessToken !== "" && accessToken !== null && accessToken !== undefined) {
        this.props.history.push("/");
     }
@@ -105,7 +105,7 @@ class Login extends Component {
 
               <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
-                  Submit
+                  Login
                 </Button>
               </Form.Item>
             </Form>

@@ -35,7 +35,7 @@ export const getPoll = () => {
 
 export const getPollAnalytics = (data) => {
     return async (dispatch) => {
-        let pollData = await postData('/polls/getTopPolls');
+        let pollData = await postData('/polls/getTopPolls',data);
         dispatch(getAnalyticAction(pollData.data));
     }
 }

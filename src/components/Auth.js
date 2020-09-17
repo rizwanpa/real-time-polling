@@ -9,8 +9,8 @@ class Auth extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/login" component={Login} />
           <Route path="/" component={MainApp} />
+          <Route exact path="/login" component={Login} />
         </Switch>
       </Router>
     );
