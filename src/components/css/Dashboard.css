@@ -21,6 +21,7 @@
   -webkit-box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
   border: thin solid transparent;
   border-radius: 6px;
+  user-select: none;
 }
 .poll-info, .poll-response {
   flex: 1;
@@ -41,4 +42,12 @@
 }
 .text-center {
   text-align: center;
+}
+.poll-question {
+  display: flex;
+  margin: 0 50px;
+  padding: 10px;
+}
+.poll-question > * {
+  flex: 1;
 }

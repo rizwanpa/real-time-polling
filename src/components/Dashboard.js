@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./css/Dashboard.css";
-import { getPollAnalytics } from "./../actions";
+import { getPollAnalytics, togglePoll } from "./../actions";
+import {HorizontalBar} from 'react-chartjs-2';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -10,12 +11,12 @@ class Dashboard extends Component {
       polls: []
     };
   }
-
+  
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
     if (accessToken === "" || accessToken === null) {
-        this.props.history.push("/login");
-    }else{
+      this.props.history.push("/login");
+    } else {
       let params = {
         status: "published",
         sort: "",
@@ -26,21 +27,65 @@ class Dashboard extends Component {
         title: ""
       };
       this.props.getPollAnalyticsAction(params);
-
     }
   }
 
-  goToSurvey(poll) {
-    console.log(poll.uuid);
+  toggleSurvey(index) {
+    this.props.togglePollAction(index);
+  }
+
+  getRandomColor() {
+    var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+    return randomColor;
+  }
+
+  getChartData(question) {
+
+    const data = {
+      labels: [],
+      datasets: []
+    };
+    question.options.forEach((option, index) => {
+      let randomColor = this.getRandomColor()
+      data.labels.push(option.option)
+      data.datasets.push({
+        label: [option.option],
+        backgroundColor: randomColor,
+        hoverBackgroundColor: randomColor,
+        hoverBorderColor: randomColor,
+        data: [option.percentage]
+      })
+    })
+    console.log(data)
+    return data;
   }
 
   render() {
+    let chartOptions = {
+      scales: {
+        xAxes: [{
+          stacked: true,
+          display: true
+        }],
+        yAxes:[{
+          stacked: true,
+          display: false
+        }]
+      },
+      legend: {
+        display:true
+      },
+      tooltips:{
+        enabled: true
+      }
+    }
+
     return (
       <div className="dashboard">
         <div className="polls">
           {this.props.pollsAnalytics.map((poll, index) => 
-            <>
-              <div className="poll" key={index} onClick={ () => this.goToSurvey(poll)}>
+            <div key={index}>
+              <div className="poll"  onClick={() => this.toggleSurvey(index)}>
                 <div className="poll-info">
                   <p>{poll.title}</p>
                   <p className="poll-desc">{poll.description}</p>
@@ -56,10 +101,17 @@ class Dashboard extends Component {
                   </div>
                 </div>
               </div>
-              <div key={index+'-'+1} className="poll-details" style={poll.expanded?{display:'block'}:{display:'none'}}>
-                hola
+              <div className="poll-details" style={poll.expanded?{display:'block'}:{display:'none'}}>
+                {poll.questions.map((question, index) => 
+                  <div className="poll-question" key={index}>
+                    <div className="question-text">{index+1}. {question.question}</div>
+                    <div className="response">
+                      <HorizontalBar data={() => this.getChartData(question)} options={chartOptions} height={100}/>
+                    </div>
+                  </div>
+                )}
               </div>
-            </>
+            </div>
           ) }
         </div>
       </div>
@@ -72,7 +124,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps =  {
-  getPollAnalyticsAction: getPollAnalytics
+  getPollAnalyticsAction: getPollAnalytics,
+  togglePollAction: togglePoll
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

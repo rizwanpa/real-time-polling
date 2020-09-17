@@ -7,6 +7,7 @@ export const CREATE_POLL = 'CREATE_POLL';
 export const GET_POLL = 'GET_POLL';
 export const VIEW_POLLS = 'VIEW_POLLS';
 export const GET_POLL_ANALYTICS = 'GET_POLL_ANALYTICS';
+export const TOGGLE_POLL = 'TOGGLE_POLL';
 
 /* 
 action creators
@@ -24,6 +25,9 @@ export const setPollAction = data =>{
 export const getAnalyticAction = data =>{
     return { type: GET_POLL_ANALYTICS, data}
 }
+export const togglePollAction = index =>{
+    return { type: TOGGLE_POLL, index}
+}
 
 export const getPoll = () => {
     return (dispatch) => {
@@ -38,4 +42,10 @@ export const getPollAnalytics = (data) => {
         let pollData = await postData('/polls/getTopPolls',data);
         dispatch(getAnalyticAction(pollData.data));
     }
+}
+
+export const togglePoll = (index) => {
+  return (dispatch) => {
+    dispatch(togglePollAction(index));
+  }
 }

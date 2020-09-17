@@ -1,5 +1,5 @@
 import { defineState} from 'redux-localstore';
-import { CREATE_POLL, GET_POLL, VIEW_POLLS, GET_POLL_ANALYTICS } from './../actions/index';
+import { CREATE_POLL, GET_POLL, VIEW_POLLS, GET_POLL_ANALYTICS, TOGGLE_POLL } from './../actions/index';
 
 const defaultState = {
     polls : [],
@@ -26,6 +26,13 @@ export default(state = initialState, actions) => {
         return {
             ...state
         }
+        case TOGGLE_POLL :
+          let pollsAnalytics = state.pollsAnalytics[actions.index];
+          pollsAnalytics.expanded = !pollsAnalytics.expanded;
+          console.log('pollsAnalytics', actions.index);
+          return {
+            ...state,
+          }
         default :
             return {
                 ...state
