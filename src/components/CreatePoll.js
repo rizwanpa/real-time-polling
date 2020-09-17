@@ -32,6 +32,12 @@ class CreatePoll extends Component {
       modalTitle: ''
     };
   }
+  componentDidMount(){
+    let accessToken = sessionStorage.getItem("accessToken");
+    if (accessToken === "") {
+        this.props.history.push("/login");
+    }
+  }
 
   formItemLayout = {
     labelCol: {

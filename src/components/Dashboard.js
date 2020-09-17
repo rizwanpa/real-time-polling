@@ -12,6 +12,10 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
+    let accessToken = sessionStorage.getItem("accessToken");
+    if (accessToken === "") {
+        this.props.history.push("/login");
+    }
     let params = {
       status: "published",
       sort: "",

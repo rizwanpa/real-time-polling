@@ -14,8 +14,8 @@ class Login extends Component {
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
     console.log("accessToken000", accessToken);
-    if (accessToken !== "") {
-        this.props.history.push("/");
+    if (accessToken !== "" && accessToken !== null && accessToken !== undefined) {
+       this.props.history.push("/");
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -30,10 +30,8 @@ class Login extends Component {
     let { id } = this.props.user !== undefined ? this.props.user : "";
     let accessToken = sessionStorage.getItem("accessToken");
     console.log("accessToken000", accessToken);
-    if (username !== "" && id !== "" && accessToken !== "") {
-      if (this.props.user.errors.code !== 1) {
+    if (accessToken !== "") {
         this.props.history.push("/");
-      }
     } else {
       //this.setState({errorMessage:MESSAGE.authError})
       //this.props.history.push("/login");
