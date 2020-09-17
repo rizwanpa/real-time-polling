@@ -1,4 +1,4 @@
-import {postData} from './../utills/utills';
+import {postData,deleteData} from './../utills/utills';
 
 /* 
 action type
@@ -7,6 +7,7 @@ export const CREATE_POLL = 'CREATE_POLL';
 export const GET_POLL = 'GET_POLL';
 export const VIEW_POLLS = 'VIEW_POLLS';
 export const GET_POLL_ANALYTICS = 'GET_POLL_ANALYTICS';
+export const DELETE_POLL = 'DELETE_POLL';
 
 /* 
 action creators
@@ -24,6 +25,9 @@ export const setPollAction = data =>{
 export const getAnalyticAction = data =>{
     return { type: GET_POLL_ANALYTICS, data}
 }
+export const deletePollAction = data =>{
+    return { type: DELETE_POLL, data}
+}
 
 export const getPoll = () => {
     return (dispatch) => {
@@ -37,5 +41,13 @@ export const getPollAnalytics = (data) => {
     return async (dispatch) => {
         let pollData = await postData('/polls/getTopPolls',data);
         dispatch(getAnalyticAction(pollData.data));
+    }
+}
+
+export const deletePoll = (uuid) => {
+    return async (dispatch) => {
+        let deletedPoll = await deleteData(`/polls/${uuid}`);
+        console.log('deletedPoll_________',deletedPoll);
+        dispatch(deletePollAction(deletedPoll.data));
     }
 }

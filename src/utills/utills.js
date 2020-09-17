@@ -54,6 +54,31 @@ export function postData(url, params) {
       return (response);
     });
 }
+
+export function deleteData(url, params) {
+  let accessToken = sessionStorage.getItem("accessToken");
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  let response = {
+    data: {},
+    error: {},
+    errorCode: 0
+  }
+  return axios
+    .delete(url,params)
+    .then((response) => {      
+      return (response);
+    })
+    .catch((err) => {
+      response.data = {};
+      response.error = err;
+      response.errorCode = 1;
+      if (!_.isUndefined(err.response) && err.response.status === 401) {
+        //store.dispatch(setSessionExpired(true));
+        store.dispatch(push('/login'));
+      }
+      return (response);
+    });
+}
 /* 
 export function getData(url) {
   // store.dispatch(setLoadingState(true));

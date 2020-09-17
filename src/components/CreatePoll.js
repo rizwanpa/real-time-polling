@@ -33,10 +33,16 @@ class CreatePoll extends Component {
     };
   }
   componentDidMount(){
+    console.log('componentDidMount==>',this.props)
     let accessToken = sessionStorage.getItem("accessToken");
     if (accessToken === "") {
         this.props.history.push("/login");
     }
+    let poll_id = this.props.match.params.pollId !== undefined ? this.props.match.params.pollId : '';
+  }
+
+  componentDidUpdate(){
+    console.log('componentDidUpdate==>',this.props)
   }
 
   formItemLayout = {
@@ -81,8 +87,8 @@ class CreatePoll extends Component {
       }
     }
     //return false;
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IkFkbWluIiwiaWF0IjoxNjAwMzE2NDg0LCJleHAiOjE2MDA0MDI4ODR9.EczrkagmfcoeqmBLLBQL9A7I8_mE59hsBtHjSGdMCa0";
+    let accessToken = sessionStorage.getItem("accessToken");
+    axios.defaults.headers.common["Authorization"] =`Bearer ${accessToken}`;
     axios
       .post(`http://localhost:3030/polls/`, {
         ...pollData,
@@ -179,6 +185,7 @@ class CreatePoll extends Component {
           {/* This is the Dynamic questions Adder */}
           <Form.List name="questions">
             {(fields, { add, remove }) => {
+              console.log('')
               return (
                 <div>
                   {fields.map(field => (
