@@ -13,19 +13,21 @@ class Dashboard extends Component {
 
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
-    if (accessToken === "") {
+    if (accessToken === "" || accessToken === null) {
         this.props.history.push("/login");
+    }else{
+      let params = {
+        status: "published",
+        sort: "",
+        order: "",
+        limit: 5,
+        fromDate: "",
+        endDate: "",
+        title: ""
+      };
+      this.props.getPollAnalyticsAction(params);
+
     }
-    let params = {
-      status: "published",
-      sort: "",
-      order: "",
-      limit: 5,
-      fromDate: "",
-      endDate: "",
-      title: ""
-    };
-    this.props.getPollAnalyticsAction(params);
   }
 
   goToSurvey(poll) {
