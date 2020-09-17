@@ -71,7 +71,7 @@ class MainApp extends Component {
                 <Switch>                  
                   <Route exact path='/' component={Dashboard} />
                   <Route exact path='/dashboard' component={Dashboard} />
-                  <Route exact path='/create-poll' component={CreatePoll} />
+                  <Route exact path='/create-poll/:pollId?' component={CreatePoll} />
                   <Route exact path='/polls' component={ListPoll} />
                 </Switch>
               </Content>

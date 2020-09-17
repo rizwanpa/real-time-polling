@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./css/List.css";
-import { getPollAnalytics } from "./../actions";
+import { getPollAnalytics, deletePoll } from "./../actions";
 
 class ListPoll extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      polls: []
+      polls: [],
+      params : {
+        status: "",
+        sort: "",
+        order: "",
+        limit: 100,
+        fromDate: "",
+        endDate: "",
+        title: ""
+      }
     };
   }
 
@@ -17,7 +26,7 @@ class ListPoll extends Component {
       this.props.history.push("/login");
     }
     let params = {
-      status: "published",
+      status: "",
       sort: "",
       order: "",
       limit: 100,
@@ -27,11 +36,25 @@ class ListPoll extends Component {
     };
     this.props.getPollAnalyticsAction(params);
   }
+  componentDidUpdate(prevProps) {
+    console.log("componentDidUpdate",prevProps.deletedPollId, this.props.deletedPollId);
+    if(prevProps.deletedPollId !== this.props.deletedPollId){
+      this.props.getPollAnalyticsAction(this.state.params);
+    }
+  }
 
   goToSurvey(poll) {
     console.log(poll.uuid);
   }
-
+  delete(poll) {
+    console.log(poll.uuid);
+    this.props.deletePollAction(poll.id);
+  }
+  edit(poll) {
+    console.log(poll.uuid);
+    //this.props.edt(poll.id);
+    this.props.history.push(`/create-poll/${poll.id}`);
+  }
   render() {
     console.log("list poll=>>>>", this.props.pollsAnalytics);
     return (
@@ -51,17 +74,16 @@ class ListPoll extends Component {
                   </div>
                   <div className="responses">
                     <p className="text-center">{poll.totalResponses}</p>
-                    <p>Responses</p>
+                    <p onClick = {()=>this.delete(poll)}>delete</p>
+                    <p onClick = {()=>this.edit(poll)}>edit</p>
                   </div>
                 </div>
               </div>
               {poll.questions.map(question => {
-                console.log(question);
                 return (
                   <div key={question.id} className="question">
                     <div>{question.question}</div>
                     {question.options.map(option=>{
-                      console.log('option===>',option.option);
                       return(<div className="progress" key={option.id} >
                       {option.option}
                       </div>)
@@ -79,11 +101,15 @@ class ListPoll extends Component {
 }
 
 const mapStateToProps = state => {
-  return { pollsAnalytics: state.dashboard.pollsAnalytics };
+  return {
+    pollsAnalytics: state.dashboard.pollsAnalytics,
+    deletedPollId: state.dashboard.deletedPollId
+  };
 };
 
 const mapDispatchToProps = {
-  getPollAnalyticsAction: getPollAnalytics
+  getPollAnalyticsAction: getPollAnalytics,
+  deletePollAction: deletePoll,
 };
 
 export default connect(
