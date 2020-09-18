@@ -31,7 +31,7 @@ class Login extends Component {
     let accessToken = sessionStorage.getItem("accessToken");
     console.log("accessToken000", accessToken);
     if (accessToken !== "") {
-        this.props.history.push("/");
+       this.props.history.push("/");
     } else {
       //this.setState({errorMessage:MESSAGE.authError})
       //this.props.history.push("/login");
