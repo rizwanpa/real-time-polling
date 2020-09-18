@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import "./css/Dashboard.css";
 import "./css/List.css";
 import { getPollAnalytics, deletePoll } from "./../actions";
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {Button} from 'antd';
+
 
 class ListPoll extends Component {
   constructor(props) {
@@ -56,44 +60,33 @@ class ListPoll extends Component {
     this.props.history.push(`/create-poll/${poll.id}`);
   }
   render() {
-    console.log("list poll=>>>>", this.props.pollsAnalytics);
     return (
-      <div className="list">
+      <div className="dashboard list">
         <div className="polls">
-          {this.props.pollsAnalytics.map((poll, index) => (
-            <div className="list" key={index}>
-              <div className="poll-title" onClick={() => this.goToSurvey(poll)}>
+          {this.props.pollsAnalytics.map((poll, index) => 
+            <div key={index}>
+              <div className="poll">
                 <div className="poll-info">
                   <p>{poll.title}</p>
                   <p className="poll-desc">{poll.description}</p>
                 </div>
                 <div className="poll-response">
                   <div className="questions">
-                    <p className="text-center">{poll.questions.length}</p>
+                    <p className="text-center">{poll.questions.length}</p>  
                     <p>Questions</p>
                   </div>
                   <div className="responses">
-                    <p className="text-center">{poll.totalResponses}</p>
-                    <p onClick = {()=>this.delete(poll)}>delete</p>
-                    <p onClick = {()=>this.edit(poll)}>edit</p>
+                    <p className="text-center">{poll.totalResponses}</p>  
+                    <p>Responses</p>
                   </div>
                 </div>
+                <div className="poll-actions">
+                  <Button  shape="circle" icon={<EditOutlined />} />
+                  <Button  shape="circle" icon={<DeleteOutlined />} />
+                </div>
               </div>
-              {poll.questions.map(question => {
-                return (
-                  <div key={question.id} className="question">
-                    <div>{question.question}</div>
-                    {question.options.map(option=>{
-                      return(<div className="progress" key={option.id} >
-                      {option.option}
-                      </div>)
-                    }
-                    )}
-                  </div>
-                );
-              })}
             </div>
-          ))}
+          ) }
         </div>
       </div>
     );
