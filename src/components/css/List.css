@@ -1,7 +1,3 @@
-.list .poll:hover {
-  background: initial;
-  cursor: default;
-}
 .list .poll-actions {
   display: flex;
   justify-content: center;
@@ -9,4 +5,10 @@
 }
 .list .poll-actions button {
   margin: 0 5px;
+}
+.poll-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 72px;
 }

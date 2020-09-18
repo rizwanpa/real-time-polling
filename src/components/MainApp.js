@@ -45,7 +45,7 @@ class MainApp extends Component {
                   <Link to='/create-poll'>Create Poll</Link>
                 </Menu.Item>
                 <Menu.Item key="/polls" icon={<PieChartOutlined />}>
-                  <Link to='/polls'>View Poll</Link>
+                  <Link to='/polls'>Polls</Link>
                 </Menu.Item>
               </Menu>
             </Sider>
