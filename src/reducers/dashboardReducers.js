@@ -36,6 +36,9 @@ export default(state = initialState, actions) => {
         }
         case TOGGLE_POLL :
           let pollsAnalytics = state.pollsAnalytics[actions.index];
+          if(!("expanded" in pollsAnalytics)) {
+            pollsAnalytics.expanded = false;
+          }
           pollsAnalytics.expanded = !pollsAnalytics.expanded;
           console.log('pollsAnalytics', actions.index);
           return {
