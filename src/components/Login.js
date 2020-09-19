@@ -15,7 +15,7 @@ class Login extends Component {
     let accessToken = sessionStorage.getItem("accessToken");
     console.log("accessToken000", accessToken, accessToken !== null,accessToken !== "" && accessToken !== null && accessToken !== undefined);
     if (accessToken !== "" && accessToken !== null && accessToken !== undefined) {
-       this.props.history.push("/");
+       //this.props.history.push("/");
     }
   }
   componentWillReceiveProps(nextProps) {
