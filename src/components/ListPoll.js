@@ -6,7 +6,6 @@ import { getPollAnalytics, deletePoll, togglePoll } from "./../actions";
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Tag, Popconfirm } from 'antd';
 
-
 class ListPoll extends Component {
   constructor(props) {
     super(props);
@@ -62,6 +61,7 @@ class ListPoll extends Component {
     //this.props.edt(poll.id);
     this.props.history.push(`/create-poll/${poll.id}`);
   }
+
   render() {
     return (
       <div className="dashboard list">

@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import "./css/Dashboard.css";
 import { getPollAnalytics, togglePoll } from "./../actions";
 import {HorizontalBar} from 'react-chartjs-2';
+import constants from '../constants/appConfig'
+import io from 'socket.io-client'
+var socket = io(constants.API_SERVER);
 
 class Dashboard extends Component {
   constructor(props) {
@@ -28,6 +31,9 @@ class Dashboard extends Component {
       };
       this.props.getPollAnalyticsAction(params);
     }
+    socket.on('first-message', (msg) => {
+      console.log('NEW SOCKET MESSAGE', msg)
+    });
   }
 
   toggleSurvey(index) {
