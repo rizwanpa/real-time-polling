@@ -8,43 +8,48 @@ import {
   Radio,
   Checkbox
 } from "antd";
+import { DownloadOutlined } from '@ant-design/icons';
+
 import { getPollByUuid } from "./../../actions/submitPoll";
 import "./Index.css";
+
 class Index extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      surveyCode: ''
+    };
   }
   formRef = createRef();
   formUuidRef = createRef();
   formPollRef = createRef();
+  codeInputRef = createRef();
   componentDidMount() {
     console.log('index==> componentDidMount', this.props);
   }
   componentWillReceiveProps(nextProps) {
-    console.log('index===>componentWillReceiveProps', nextProps.poll[0]);
-    console.log('index===>componentWillReceiveProps CONDITIONS=======>', typeof nextProps.poll[0].uuid, `/submit-poll/${nextProps.poll[0].uuid}`);
     if (!this.props.match.params.uuid) {
       let uuid = nextProps.poll[0].uuid;
       this.props.history.push(`/submit-poll/${uuid}`)
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    console.log('index===>componentDidUpdate', prevProps, this.props)
+   
   }
   onFinish = formData => {
-    console.log('===============', formData.uuid);
+    
     this.props.getPollByUuidAction(formData.uuid);
-  };
+  }
+
+  change
+
   render() {
-    console.log('index props----', this.props.poll[0]);
     return (
       <div className="survey-index">
         {(!this.props.match.params.uuid) ?
           <div className="survey-box">
-            <Form
-              labelCol={{ span: 14 }}
-              wrapperCol={{ span: 14 }}
+            {/* <Form
+              
               layout="vertical"
               size="small"
               onFinish={this.onFinish}
@@ -71,7 +76,18 @@ class Index extends Component {
               <Button type="primary" htmlType="submit">
                 Submit Poll
             </Button>
-            </Form>
+            </Form> */}
+            <div className="survey-header">
+              Survey Code
+            </div>
+            <div className="survey-code">
+              <input className="code-input"  placeholder="code"  onChange={(e) => this.setState({surveyCode:e.target.value})}/>
+            </div>
+            <div className="submit-code">
+              <Button type="primary" shape="round" size={200} disabled={!this.state.surveyCode.length}>
+                START
+              </Button>
+            </div>
           </div>
           :
           <div className='survey-poll'>
