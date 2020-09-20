@@ -166,6 +166,7 @@ class CreatePoll extends Component {
               }}
               ref={this.formTitleRef}
               placeholder="Poll title"
+              autocomplete="off"
             />
           </Form.Item>
           <Form.Item
