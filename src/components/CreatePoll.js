@@ -63,6 +63,7 @@ class CreatePoll extends Component {
   };
 
   formTitleRef = createRef();
+  formRef = createRef();
 
   savePoll(pollData) {
     console.log('SavePolls--->',pollData);
@@ -102,7 +103,13 @@ class CreatePoll extends Component {
           uuid : res.data.poll.uuid,
 
         }
-        this.showModal(modalData);
+        if(status === 'published'){
+          this.showModal(modalData);          
+          message.success('Poll created successfully');
+        }else{
+          this.formRef.current.resetFields();
+          message.success('Poll Drafted successfully');
+        }
       });
   }
   showModal = (modalData) => {
@@ -114,6 +121,7 @@ class CreatePoll extends Component {
   };
   handleOk = e => {
     console.log(e);
+    this.formRef.current.resetFields();
     this.setState({
       modalVisible: false,
       modalTitle:''
@@ -135,6 +143,7 @@ class CreatePoll extends Component {
           layout="vertical"
           size="small"
           onFinish={onFinish}
+          ref={this.formRef}
         >
           <Form.Item
             label="Title"
@@ -156,7 +165,8 @@ class CreatePoll extends Component {
                 boxSizing: "border-box"
               }}
               ref={this.formTitleRef}
-              placeholder="Poll description"
+              placeholder="Poll title"
+              autocomplete="off"
             />
           </Form.Item>
           <Form.Item
@@ -339,16 +349,18 @@ class CreatePoll extends Component {
         visible={this.state.modalVisible}
         onOk={this.handleOk}
         cancelButtonProps={{ display: 'none' }}
-        width={500}
+        width={300}
       >
+      <div style={{textAlign:'center'}}>
         <deckgo-qrcode content={`${BASE_URL}/${this.state.uuid}`}></deckgo-qrcode>
         <div className='pollUrl'>{`${BASE_URL}/${this.state.uuid}`}</div>
         <div className='padding10'>{`Poll Code - ${this.state.uuid}`}</div>
-        <div className="icons">
+        {/* <div className="icons">
           <img src={fbIcon} alt="share-facebook"/>
           <img src={instagramIcon} alt="share-instagram"/>
           <img src={twitterIcon} alt="share-twitter"/>
-        </div>
+        </div> */}
+      </div>
       </Modal>
       </div>
     );

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router,Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Row, Col, Form, Input, Button, Alert,message } from "antd";
-
 import { history } from "../store";
 import { setSecurity } from "./../actions/userAction";
 import {MESSAGE} from './../constants/dictionary';
+
 
 class Login extends Component {
   state = {
@@ -18,24 +18,21 @@ class Login extends Component {
        //this.props.history.push("/");
     }
   }
-  componentWillReceiveProps(nextProps) {
+  /* componentWillReceiveProps(nextProps) {
     // if(nextProps.user.name)
     //     this.props.history.push("/");
     // else
     //     this.props.history.push("/login");
-  }
+  } */
   componentDidUpdate(prevProps) {
     console.log("componentsDidUpdate prevProps--->", prevProps);
     let { username } = this.props.user !== undefined ? this.props.user : "";
     let { id } = this.props.user !== undefined ? this.props.user : "";
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log("accessToken000", accessToken);
-    if (accessToken !== "") {
-       this.props.history.push("/");
-    } else {
-      //this.setState({errorMessage:MESSAGE.authError})
-      //this.props.history.push("/login");
+    console.log("componentDidUpdate ==> accessToken000", accessToken);
+    if (!accessToken) {
       message.error(MESSAGE.authError);
+       //this.props.history.push("/login");
     }
   }
   onFinishFailed = errorInfo => {};
@@ -57,6 +54,12 @@ class Login extends Component {
         span: 8
       }
     };
+    let accessToken = sessionStorage.getItem("accessToken");
+    console.log('login render--->redirect comment',accessToken);
+    if (accessToken) {
+      console.log('login accessToken ture***********');
+      return <Redirect to='/' />
+    }
     return (
       <Router history={history}>
         <div className='login-background'>

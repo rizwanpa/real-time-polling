@@ -14,9 +14,10 @@ class Dashboard extends Component {
   
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
-    if (accessToken === "" || accessToken === null) {
+    console.log('Dashboard----didMount session', accessToken);
+   /*  if (accessToken === "" || accessToken === null) {
       this.props.history.push("/login");
-    } else {
+    } else { */
       let params = {
         status: "published",
         sort: "",
@@ -27,7 +28,7 @@ class Dashboard extends Component {
         title: ""
       };
       this.props.getPollAnalyticsAction(params);
-    }
+    //}
   }
 
   toggleSurvey(index) {
@@ -79,11 +80,12 @@ class Dashboard extends Component {
         enabled: true
       }
     }
+    console.log('Dashboard---->',this.props.pollsAnalytics);
 
     return (
       <div className="dashboard">
         <div className="polls">
-          {this.props.pollsAnalytics.map((poll, index) => 
+          {this.props.pollsAnalytics.length && this.props.pollsAnalytics.map((poll, index) => 
             <div key={index}>
               <div className="poll"  onClick={() => this.toggleSurvey(index)}>
                 <div className="poll-info">

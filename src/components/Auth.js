@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import Login from "./Login";
 import MainApp from "./MainApp";
+import PrivateRoute from './PrivateRoute';
+import Index from './submitpolls/Index'
 
 class Auth extends Component {
   state = {};
@@ -9,8 +11,11 @@ class Auth extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route path="/" component={MainApp} />
+          <Route
+            path="/submit-poll/:uuid?" component={Index}
+          />
+          <Route path="/login" component={Login} />
+          <PrivateRoute path="/" component={MainApp} />
         </Switch>
       </Router>
     );

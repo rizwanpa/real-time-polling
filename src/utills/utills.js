@@ -48,7 +48,6 @@ export function postData(url, params) {
       response.error = err;
       response.errorCode = 1;
       if (!_.isUndefined(err.response) && err.response.status === 401) {
-        //store.dispatch(setSessionExpired(true));
         store.dispatch(push('/login'));
       }
       return (response);
@@ -74,6 +73,30 @@ export function deleteData(url, params) {
       response.errorCode = 1;
       if (!_.isUndefined(err.response) && err.response.status === 401) {
         //store.dispatch(setSessionExpired(true));
+        store.dispatch(push('/login'));
+      }
+      return (response);
+    });
+}
+
+export function getData(url) {
+  axios.defaults.headers.common['Authorization'] = getState().user.jwt;
+  let response = {
+    data: {},
+    error: {},
+    errorCode: 0
+  }
+
+  return axios
+    .get(`${url}`)
+    .then(function (response) {
+      return (response);
+    })
+    .catch((err) => {
+      response.data = {};
+      response.error = err;
+      response.errorCode = 1;
+      if (!_.isNil(err && err.response) && err.response.status === 401) {
         store.dispatch(push('/login'));
       }
       return (response);

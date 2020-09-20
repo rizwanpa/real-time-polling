@@ -12,7 +12,7 @@ import {
 import { getPoll } from "./../actions/index";
 import { history } from '../store';
 import Dashboard from './Dashboard'
-import CreatePoll from './CreatePoll'
+import WrappedCreatePollForm from './CreatePoll'
 import ListPoll from './ListPoll'
 
 const { Header, Sider, Content } = Layout;
@@ -71,7 +71,7 @@ class MainApp extends Component {
                 <Switch>                  
                   <Route exact path='/' component={Dashboard} />
                   <Route exact path='/dashboard' component={Dashboard} />
-                  <Route exact path='/create-poll/:pollId?' component={CreatePoll} />
+                  <Route exact path='/create-poll/:pollId?' component={WrappedCreatePollForm} />
                   <Route exact path='/polls' component={ListPoll} />
                 </Switch>
               </Content>
