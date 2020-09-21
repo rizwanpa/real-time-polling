@@ -48,7 +48,7 @@ input.code-input {
   text-align: center;
   font-size: 30px;
   padding: 25px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 div.submit-code {
   padding: 5px 0;

@@ -34,57 +34,30 @@ class Index extends Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-   
+
   }
-  onFinish = formData => {
-    
-    this.props.getPollByUuidAction(formData.uuid);
+  getPoll = () => {
+    this.props.getPollByUuidAction(this.state.surveyCode);
   }
 
-  change
+  submitPollVote = formData => {
+    console.log('submitPollVote',formData);
+    //this.props.getPollByUuidAction(formData.uuid);
+  }
 
   render() {
     return (
       <div className="survey-index">
         {(!this.props.match.params.uuid) ?
           <div className="survey-box">
-            {/* <Form
-              
-              layout="vertical"
-              size="small"
-              onFinish={this.onFinish}
-              ref={this.formRef}
-            >
-              <Form.Item
-                label="Poll Code"
-                validateTrigger={["onChange", "onBlur"]}
-                rules={[
-                  {
-                    required: true,
-                    whitespace: false,
-                    message: "Please enter poll code to continue."
-                  }
-                ]}
-                name="uuid"
-              >
-                <Input
-                  ref={this.formUuidRef}
-                  autoComplete="off"
-                  placeholder="Enter 6 digit poll code"
-                />
-              </Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit Poll
-            </Button>
-            </Form> */}
             <div className="survey-header">
               Survey Code
             </div>
             <div className="survey-code">
-              <input className="code-input"  placeholder="code"  onChange={(e) => this.setState({surveyCode:e.target.value})}/>
+              <input className="code-input" placeholder="code" onChange={(e) => this.setState({ surveyCode: e.target.value })} />
             </div>
             <div className="submit-code">
-              <Button type="primary" shape="round" size={200} disabled={!this.state.surveyCode.length}>
+              <Button type="primary" shape="round" size={200} disabled={!this.state.surveyCode.length} onClick={this.getPoll}>
                 START
               </Button>
             </div>
@@ -96,43 +69,51 @@ class Index extends Component {
               wrapperCol={{ span: 14 }}
               layout="vertical"
               size="small"
-              onFinish={this.onFinish}
+              onFinish={this.submitPollVote}
               ref={this.formPollRef}
             >
-            {this.props.poll && 
-            this.props.poll.map((poll)=>{
-              return (
-              <Card key = {poll.id} title={poll.title}>
-                {poll.questions && poll.questions.map((question)=>{
-                  return (<Card
-                    key={question.id}
-                    style={{ marginTop: 16 }}
-                    type="inner"
-                    title={question.question}
-                    >
-                      <div >
-                      <ul className="list-group">
-                    {
-                      question.options && question.options.map((option)=>{
-                        let typeOption = question.type ? <Checkbox>{option.option}</Checkbox>: <Radio>{option.option}</Radio>
-                      return (
-                        <li key={option.option} className="list-group-item">{typeOption}</li>
-                        
-                        )
-                      })
-                    }
-                    </ul>                      
-                    </div>
-                  </Card>)
+              {this.props.poll &&
+                this.props.poll.map((poll) => {
+                  return (
+                    <Card key={poll.id} title={poll.title}>
+                      {poll.questions && poll.questions.map((question) => {
+                        return (<Card
+                          key={question.id}
+                          style={{ marginTop: 16 }}
+                          type="inner"
+                          title={question.question}
+                        >
+                          <div >
+                            <ul className="list-group">
+                              <Form.Item name={question.id} className="collection-create-form_last-form-item">
+                                <Radio.Group>
+                                  {
+                                    question.options && question.options.map((option) => {
+                                      let typeOption = question.type ? <Checkbox value={option.id}>{option.option}</Checkbox> : <Radio value={option.id}>{option.option}</Radio>
+                                      return (
+                                        <li key={option.option} className="list-group-item">{typeOption}</li>
+                                      )
+                                    })
+                                  }
+                                </Radio.Group>
+                              </Form.Item>
+                            </ul>
+                          </div>
+                        </Card>)
 
-                })}
-              </Card>)
+                      })}
+                    </Card>)
 
-            })
-                }
-            </Form>  
+                })
+              }
+            </Form>
+            <div className="inner-wrapper">
+              <Button type="primary" htmlType="submit">
+                Submit Your Vote
+            </Button>
+            </div>
           </div>
-      }
+        }
       </div>
     );
   }
