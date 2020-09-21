@@ -9,6 +9,7 @@ export const VIEW_POLLS = 'VIEW_POLLS';
 export const GET_POLL_ANALYTICS = 'GET_POLL_ANALYTICS';
 export const TOGGLE_POLL = 'TOGGLE_POLL';
 export const DELETE_POLL = 'DELETE_POLL';
+export const UPDATE_POLL = 'UPDATE_POLL';
 
 /* 
 action creators
@@ -31,6 +32,9 @@ export const togglePollAction = index =>{
 }
 export const deletePollAction = data =>{
     return { type: DELETE_POLL, data}
+}
+export const updatePollAction = data =>{
+    return { type: UPDATE_POLL, data}
 }
 
 export const getPoll = () => {
@@ -60,3 +64,9 @@ export const deletePoll = (uuid) => {
         dispatch(deletePollAction(deletedPoll.data));
     }
 }
+
+export const updatePoll = (poll) => {
+    return (dispatch) => {
+      dispatch(updatePollAction(poll));
+    }
+  }

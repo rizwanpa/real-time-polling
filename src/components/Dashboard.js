@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./css/Dashboard.css";
-import { getPollAnalytics, togglePoll } from "./../actions";
+import { getPollAnalytics, togglePoll, updatePoll } from "./../actions";
 import {HorizontalBar} from 'react-chartjs-2';
 import constants from '../constants/appConfig'
 import io from 'socket.io-client'
@@ -32,8 +32,9 @@ class Dashboard extends Component {
       };
       this.props.getPollAnalyticsAction(params);
       
-      socket.on('first-message', (msg) => {
-        console.log('NEW SOCKET MESSAGE', msg)
+      socket.on('refresh-poll-list', (msg) => {
+        console.log('NEW SOCKET MESSAGE', msg);
+        this.props.updatePollAction(msg);
       });
     }
 
@@ -133,7 +134,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps =  {
   getPollAnalyticsAction: getPollAnalytics,
-  togglePollAction: togglePoll
+  togglePollAction: togglePoll,
+  updatePollAction: updatePoll
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

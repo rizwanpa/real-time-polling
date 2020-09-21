@@ -55,9 +55,7 @@ class Login extends Component {
       }
     };
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log('login render--->redirect comment',accessToken);
     if (accessToken) {
-      console.log('login accessToken ture***********');
       return <Redirect to='/' />
     }
     return (
