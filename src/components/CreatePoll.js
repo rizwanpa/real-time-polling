@@ -353,7 +353,7 @@ class CreatePoll extends Component {
       >
       <div style={{textAlign:'center'}}>
         <deckgo-qrcode content={`${BASE_URL}/submit-poll/${this.state.uuid}`}></deckgo-qrcode>
-        <div className='pollUrl'>{`${BASE_URL}/${this.state.uuid}`}</div>
+        <div className='pollUrl'>{`${BASE_URL}/submit-poll/${this.state.uuid}`}</div>
         <div className='padding10'>{`Poll Code - ${this.state.uuid}`}</div>
         {/* <div className="icons">
           <img src={fbIcon} alt="share-facebook"/>

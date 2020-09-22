@@ -89,3 +89,19 @@ input.code-input::placeholder {
 .width-100-per {
   width: 100%;
 }
+.thanks {
+  text-align: center;
+  padding: 10px;
+  /* margin: 10px; */
+  background: #040f36;
+  border-top-right-radius: 10px;
+  font-weight: 500;
+  color: #fff;
+  font-size: 15px;
+  border-top-left-radius: 10px;
+}
+.icons img {
+  width: 10em;
+  height: 10em;
+  padding: 5px;
+}

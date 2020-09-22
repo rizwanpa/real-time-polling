@@ -3,7 +3,8 @@ import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import Login from "./Login";
 import MainApp from "./MainApp";
 import PrivateRoute from './PrivateRoute';
-import Index from './submitpolls/Index'
+import Index from './submitpolls/Index';
+import Thanks from './submitpolls/Thanks';
 
 class Auth extends Component {
   state = {};
@@ -13,6 +14,9 @@ class Auth extends Component {
         <Switch>
           <Route
             path="/submit-poll/:uuid?" component={Index}
+          />
+          <Route
+            path="/thanks" component={Thanks}
           />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/" component={MainApp} />

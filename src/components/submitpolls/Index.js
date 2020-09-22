@@ -1,11 +1,11 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
-import { Form, Input, Button, Card, Radio, Checkbox, InputNumber } from "antd";
+import { Form, Input, Button, Card, Radio, Checkbox, InputNumber, message } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 
 import { getPollByUuid, submitPollVote } from "./../../actions/submitPoll";
 import "./Index.css";
-import { object } from "prop-types";
+
 
 class Index extends Component {
   constructor(props) {
@@ -30,6 +30,7 @@ class Index extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps====>',nextProps,nextProps.voteDetails.errorCode !== undefined , nextProps.voteDetails.errorCode == 0);
     if (!this.props.match.params.uuid) {
       if (nextProps.poll.length) {
         let uuid = nextProps.poll[0].uuid;
@@ -39,7 +40,17 @@ class Index extends Component {
           pollError: true
         });
       }
+
     }
+    if(this.props.match.params.uuid){
+      if(nextProps.voteDetails.errorCode !== undefined && nextProps.voteDetails.errorCode == 0){
+        this.props.history.push(`/thanks`);
+      }
+      if(nextProps.voteDetails.errorCode !== undefined && nextProps.voteDetails.errorCode == 1){
+        message.error('OOPs something went wrong!');
+      }
+    }
+      
   }
   componentDidUpdate(prevProps, prevState) {}
   getPoll = () => {
@@ -296,7 +307,10 @@ class Index extends Component {
 
 const mapStateToProps = state => {
   console.log("~~~~~~~~~~~~~submit-polls state--------", state);
-  return { poll: state.pollForVote.poll };
+  return {
+    poll: state.pollForVote.poll,
+    voteDetails: state.pollForVote.voteDetails
+  };
 };
 
 const mapDispatchToProps = {
