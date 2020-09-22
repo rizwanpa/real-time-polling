@@ -166,7 +166,7 @@ class CreatePoll extends Component {
               }}
               ref={this.formTitleRef}
               placeholder="Poll title"
-              autocomplete="off"
+              autoComplete="off"
             />
           </Form.Item>
           <Form.Item
@@ -352,7 +352,7 @@ class CreatePoll extends Component {
         width={300}
       >
       <div style={{textAlign:'center'}}>
-        <deckgo-qrcode content={`${BASE_URL}/${this.state.uuid}`}></deckgo-qrcode>
+        <deckgo-qrcode content={`${BASE_URL}/submit-poll/${this.state.uuid}`}></deckgo-qrcode>
         <div className='pollUrl'>{`${BASE_URL}/${this.state.uuid}`}</div>
         <div className='padding10'>{`Poll Code - ${this.state.uuid}`}</div>
         {/* <div className="icons">
