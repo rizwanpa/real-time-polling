@@ -42,10 +42,7 @@ class Dashboard extends Component {
     this.props.togglePollAction(index);
   }
 
-  getRandomColor() {
-    var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-    return randomColor;
-  }
+  
 
   getChartData(question) {
 
@@ -54,13 +51,13 @@ class Dashboard extends Component {
       datasets: []
     };
     question.options.forEach((option, index) => {
-      let randomColor = this.getRandomColor()
+      // let randomColor = this.getRandomColor()
       data.labels.push(option.option)
       data.datasets.push({
         label: [option.option],
-        backgroundColor: randomColor,
-        hoverBackgroundColor: randomColor,
-        hoverBorderColor: randomColor,
+        backgroundColor: option.color,
+        hoverBackgroundColor: option.color,
+        hoverBorderColor: option.color,
         data: [option.percentage]
       })
     })

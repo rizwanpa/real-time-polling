@@ -1,7 +1,6 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
-import { Form, Input, Button, Card, Radio, Checkbox, InputNumber, message } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { Form, Button, Card, Radio, Checkbox, InputNumber, message } from "antd";
 
 import { getPollByUuid, submitPollVote } from "./../../actions/submitPoll";
 import "./Index.css";
@@ -12,7 +11,10 @@ class Index extends Component {
     super(props);
     this.state = {
       surveyCode: "",
-      pollError: false
+      pollError: false,
+      pollResponse: {
+
+      }
     };
   }
   formRef = createRef();
@@ -97,6 +99,8 @@ class Index extends Component {
       this.setState({mobile:mobile});
     }
   }
+
+
   render() {
     return (
       <>
@@ -111,27 +115,25 @@ class Index extends Component {
           <div className="survey-index">
             <div className="survey-box">
               <div className="survey-header">Survey Code</div>
-              {this.props.poll.length == 0 && this.state.pollError && (
-                <div className="survey-err">Poll not found</div>
-              )}
               <div className="survey-code">
                 <input
-                  className="code-input"
+                  className={`code-input ${this.props.poll.length == 0 && this.state.pollError?'has-error':''}`}
                   placeholder="code"
+                  onKeyUp={(e) => e.key =='Enter' && this.state.surveyCode.length? this.getPoll() :''}
                   onChange={e =>
                     this.setState({
                       surveyCode: e.target.value,
                       pollError: false
                     })
                   }
-                />
+                  />
               </div>
               <div className="submit-code">
                 <Button
                   type="primary"
                   shape="round"
                   size={200}
-                  disabled={!this.state.surveyCode.length}
+                  disabled={!this.state.surveyCode.length || this.state.pollError}
                   onClick={this.getPoll}
                 >
                   START
@@ -140,9 +142,9 @@ class Index extends Component {
             </div>
           </div>
         ) : (
-          <div className="survey-card">
+          <div className="survey-card survey-questions">
             <div className="survey-poll">
-              <Form
+              {<Form
                 labelCol={{ span: 24 }}
                 wrapperCol={{ span: 24 }}
                 layout="vertical"
@@ -218,6 +220,8 @@ class Index extends Component {
                             />
                           </Form.Item>
                         </div> */}
+                        
+
                         <Card key={poll.id} title={poll.title}>
                           {poll.questions &&
                             poll.questions.map(question => {
@@ -292,11 +296,11 @@ class Index extends Component {
                       size={200}
                       htmlType="submit"
                     >
-                      VOTE
+                      Submit
                     </Button>
                   </div>
                 )}
-              </Form>
+              </Form>}
             </div>
           </div>
         )}

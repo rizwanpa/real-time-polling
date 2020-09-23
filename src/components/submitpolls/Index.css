@@ -6,7 +6,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #FFFFFF;
+    background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+}
+.survey-questions {
+  background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
 }
 .survey-card{
   width: 100%;
@@ -15,16 +20,16 @@
   /* margin: 5px; */
   display: flex;
   justify-content: center;
-  background: #fffcf1;
+  overflow-y: auto;
 }
 .survey-box{
     width: 400px;
     height: 300px;
     border-radius: 10px;
     border: 1px solid #ccc;
-    background: #fbf9f6;
     display: flex;
     flex-direction: column;
+    background-color: white;
 }
 .survey-poll {
     width: 70%;
@@ -71,6 +76,7 @@ input.code-input {
   text-align: center;
   font-size: 30px;
   padding: 25px;
+  outline: 0;
   /* text-transform: uppercase; */
 }
 div.submit-code {
@@ -89,19 +95,28 @@ input.code-input::placeholder {
 .width-100-per {
   width: 100%;
 }
-.thanks {
-  text-align: center;
-  padding: 10px;
-  /* margin: 10px; */
-  background: #040f36;
-  border-top-right-radius: 10px;
-  font-weight: 500;
-  color: #fff;
-  font-size: 15px;
-  border-top-left-radius: 10px;
-}
 .icons img {
   width: 10em;
   height: 10em;
   padding: 5px;
+}
+.survey-poll .ant-card-head-title {
+  white-space: normal;
+}
+.has-error {
+  border: 1px solid #cc3300;
+}
+.thanks {
+  justify-content: center;
+}
+.survey-response-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  color: green;
+  font-size: 20px;
+  font-weight: 200;
 }
