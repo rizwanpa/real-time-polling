@@ -59,7 +59,7 @@ class ListPoll extends Component {
   edit(poll) {
     console.log(poll.uuid);
     //this.props.edt(poll.id);
-    this.props.history.push(`/create-poll/${poll.id}`);
+    this.props.history.push(`/edit-poll/${poll.id}`);
   }
 
   render() {
@@ -87,7 +87,7 @@ class ListPoll extends Component {
                   </div> */}
                 </div>
                 <div className="poll-actions">
-                  <Button shape="circle" icon={<EditOutlined />} disabled={poll.status == 'draft' ? false : true} />
+                  <Button onClick={()=>this.edit(poll)} shape="circle" icon={<EditOutlined />} disabled={poll.status == 'draft' ? false : true} />
                   <Popconfirm
                     title="Are you sure delete this poll?"
                     onConfirm={()=>this.delete(poll)}

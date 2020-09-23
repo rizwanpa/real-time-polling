@@ -80,7 +80,8 @@ export function deleteData(url, params) {
 }
 
 export function getData(url) {
-  axios.defaults.headers.common['Authorization'] = getState().user.jwt;
+  let accessToken = sessionStorage.getItem("accessToken");
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   let response = {
     data: {},
     error: {},
@@ -97,6 +98,30 @@ export function getData(url) {
       response.error = err;
       response.errorCode = 1;
       if (!_.isNil(err && err.response) && err.response.status === 401) {
+        store.dispatch(push('/login'));
+      }
+      return (response);
+    });
+}
+
+export function updateData(url, params) {
+  let accessToken = sessionStorage.getItem("accessToken");
+  axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  let response = {
+    data: {},
+    error: {},
+    errorCode: 0
+  }
+  return axios
+    .put(url, params)
+    .then((response) => {
+      return (response);
+    })
+    .catch((err) => {
+      response.data = {};
+      response.error = err;
+      response.errorCode = 1;
+      if (!_.isUndefined(err.response) && err.response.status === 401) {
         store.dispatch(push('/login'));
       }
       return (response);
@@ -153,44 +178,4 @@ export function getData(url) {
     });
 }
 
-export function submitFSLRecord(url, params) {
-  let response = {
-    data: {},
-    error: {},
-    errorCode: 0
-  }
-  return axios
-    .put(url, params)
-    .then((result) => {
-      response.data = result.data;
-      response.errorCode = 0;
-      response.error = {};
-      let notyData = {
-        message: 'Updated',
-        description: 'Selected records are updated successfully'
-      }
-      openNotificationWithIcon('success', notyData);
-      return (response);
-    })
-    .catch((err) => {
-      response.data = {};
-      response.error = err;
-      response.errorCode = 1;
-      if (!_.isNil(err && err.response) && err.response.status !== 401) {
-        let notyData = {
-          message: 'Error!',
-          description: (
-            <div>
-              <p className='noti-des'>{!_.isNil(err.message) ? err.message : 'Request failed'}</p>
-            </div>
-          )
-        }
-        openNotificationWithIcon('error', notyData);
-      }
-      if (!_.isUndefined(err.response) && err.response.status === 401) {
-        store.dispatch(setSessionExpired(true));
-        store.dispatch(push('/login'));
-      }
-      return (response);
-    });
-} */
+ */

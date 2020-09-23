@@ -13,7 +13,8 @@ import { act } from "react-dom/test-utils";
 const defaultState = {
   polls: [],
   pollsAnalytics: [],
-  deletedPollId: ""
+  deletedPollId: "",
+  editPoll : []
 };
 
 const initialState = defineState(defaultState)("polls");
@@ -36,7 +37,8 @@ export default (state = initialState, actions) => {
       };
     case GET_POLL:
       return {
-        ...state
+        ...state,
+        editPoll : actions.data.pollData
       };
     case VIEW_POLLS:
       return {
