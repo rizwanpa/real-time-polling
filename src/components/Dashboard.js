@@ -89,7 +89,7 @@ class Dashboard extends Component {
     return (
       <div className="dashboard">
         <div className="polls">
-          {this.props.pollsAnalytics.length && this.props.pollsAnalytics.map((poll, index) => 
+          {this.props.pollsAnalytics.length !== 0 && this.props.pollsAnalytics.map((poll, index) => 
             <div key={index}>
               <div className="poll"  onClick={() => this.toggleSurvey(index)}>
                 <div className="poll-info">
