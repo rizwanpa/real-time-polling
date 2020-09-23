@@ -6,15 +6,16 @@ import {
   GET_POLL_ANALYTICS,
   TOGGLE_POLL,
   DELETE_POLL,
-  UPDATE_POLL
+  UPDATE_POLL,
+  EDIT_POLL
 } from "./../actions/index";
-import { act } from "react-dom/test-utils";
 
 const defaultState = {
   polls: [],
   pollsAnalytics: [],
   deletedPollId: "",
-  editPoll : []
+  editPoll : [],
+  editDetails : {}
 };
 
 const initialState = defineState(defaultState)("polls");
@@ -64,8 +65,11 @@ export default (state = initialState, actions) => {
           }
         })
       });
+      case EDIT_POLL:
       return {
-        ...state
+        ...state,
+        editDetails : actions.data,
+        editPoll: []
       };
     default:
       return {
