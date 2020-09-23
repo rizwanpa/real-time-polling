@@ -35,9 +35,16 @@ class EditPoll extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    console.log('###############receiveProps==>',nextProps)
     this.setState({
       editPoll: nextProps.editPoll
     });
+    if(!nextProps.editDetails.errorCode && nextProps.editDetails.errorCode == 0 && nextProps.editPoll.length == 0){
+      message.success(nextProps.editDetails.data);
+      this.props.history.push(`/polls`);
+    }else{
+      //message.error('OPPs something went wrong!');
+    }
   }
   componentDidUpdate() {
     console.log("inside edit---componentDidUpdate", this.props, this.state);
@@ -119,6 +126,16 @@ class EditPoll extends Component {
   updatePoll = () => {
     this.props.editPollAction(this.state.editPoll);
   };
+  onChangeStatus = (value) =>{
+    this.setState(prevState => {
+      let editPoll = Object.assign({}, prevState.editPoll);
+      editPoll.status = value;
+      editPoll = {
+        ...editPoll
+      };
+      return { editPoll };
+    });
+  }
   render() {
     console.log("edit render", this.state);
     let { editPoll } = this.state;
@@ -153,7 +170,6 @@ class EditPoll extends Component {
         />
         {editPoll.questions &&
           editPoll.questions.map((question, index) => {
-            console.log("*************question", index, question);
             return (
               <>
                 <div className="questions" key={question.id}>
@@ -177,7 +193,6 @@ class EditPoll extends Component {
                   />
                   {question.options &&
                     question.options.map((option, optIndex) => {
-                      console.log("*************option", optIndex, option);
                       return (
                         <div className="options" key={option.id}>
                           <input
@@ -255,6 +270,15 @@ class EditPoll extends Component {
             />
           </Col>
         </Row>
+        <Radio.Group
+          defaultValue={editPoll.status== 'draft' ? 'draft' : "published"}
+          size="small"
+          buttonStyle="solid"
+          onChange={e => this.onChangeStatus(e.target.value)}
+        >
+            <Radio value="draft">Save as draft</Radio>
+            <Radio value="published">Publish</Radio>
+          </Radio.Group>
         <div className="btn-update">
           <Button type="primary" onClick={this.updatePoll}>
             update Poll
@@ -267,7 +291,8 @@ class EditPoll extends Component {
 const mapStateToProps = state => {
   console.log("~~~~~~~~~~~~~edit-polls state--------", state);
   return {
-    editPoll: state.dashboard.editPoll
+    editPoll: state.dashboard.editPoll,
+    editDetails: state.dashboard.editDetails
   };
 };
 
