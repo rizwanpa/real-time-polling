@@ -67,7 +67,8 @@ class Login extends Component {
         }
             <Form
               {...layout}
-              name="basic"
+              name="LoginForm"
+              id="LoginForm"
               initialValues={{
                 remember: true
               }}

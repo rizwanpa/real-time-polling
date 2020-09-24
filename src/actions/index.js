@@ -11,6 +11,9 @@ export const TOGGLE_POLL = "TOGGLE_POLL";
 export const DELETE_POLL = "DELETE_POLL";
 export const UPDATE_POLL = "UPDATE_POLL";
 export const EDIT_POLL = "EDIT_POLL";
+export const DELETE_POLL_OPTION = "DELETE_POLL_OPTION";
+export const DELETE_POLL_QUESTION = "DELETE_POLL_QUESTION";
+
 
 /* 
 action creators
@@ -40,6 +43,12 @@ export const updatePollAction = data => {
 export const editPollAction = data => {
   return { type: EDIT_POLL, data };
 };
+export const deletePollOptionAction = data => {
+  return { type: DELETE_POLL_OPTION, data };
+};
+export const deletePollQuestionAction = data => {
+  return { type: DELETE_POLL_QUESTION, data };
+};
 
 export const getPoll = pollId => {
   return async dispatch => {
@@ -65,7 +74,6 @@ export const togglePoll = index => {
 export const deletePoll = uuid => {
   return async dispatch => {
     let deletedPoll = await deleteData(`/polls/${uuid}`);
-    console.log("deletedPoll_________", deletedPoll);
     dispatch(deletePollAction(deletedPoll.data));
   };
 };
@@ -92,8 +100,51 @@ export const editPoll = poll => {
         statusText: editPoll.statusText,
         data: editPoll.data ? editPoll.data : {}
       };
-      console.log("______action++editDetails_________", editDetails);
       dispatch(editPollAction(editDetails));
+    }
+  };
+};
+
+export const deletePollOption = optionId => {
+  return async dispatch => {
+    let deletedPollOption = await deleteData(`polls/deleteOption/${optionId}`);
+    let deleteOptionDetails = {};
+    if (deletedPollOption.errorCode == 1) {
+      deleteOptionDetails = {
+        errorCode: deletedPollOption.errorCode,
+        data: deletedPollOption.data ? deletedPollOption.data : {}
+      };
+    } else {
+      deleteOptionDetails = {
+        errorCode: 0,
+        status: deletedPollOption.status,
+        statusText: deletedPollOption.statusText,
+        data: deletedPollOption.data ? deletedPollOption.data : {}
+      };
+
+      dispatch(deletePollOptionAction(deleteOptionDetails));
+    }
+  };
+};
+
+export const deletePollQuestion = questionId => {
+  return async dispatch => {
+    let deletedPollQuestion = await deleteData(`polls/deleteQuestion/${questionId}`);
+    let deleteQuestionDetails = {};
+    if (deletedPollQuestion.errorCode == 1) {
+      deleteQuestionDetails = {
+        errorCode: deletedPollQuestion.errorCode,
+        data: deletedPollQuestion.data ? deletedPollQuestion.data : {}
+      };
+    } else {
+      deleteQuestionDetails = {
+        errorCode: 0,
+        status: deletedPollQuestion.status,
+        statusText: deletedPollQuestion.statusText,
+        data: deletedPollQuestion.data ? deletedPollQuestion.data : {}
+      };
+
+      dispatch(deletePollQuestionAction(deleteQuestionDetails));
     }
   };
 };

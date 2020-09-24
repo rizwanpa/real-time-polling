@@ -87,3 +87,6 @@ input, label {
     text-align: center;
     padding: 10px;
 }
+.dispaly-flex {
+    display: flex;
+}

@@ -7,7 +7,9 @@ import {
   TOGGLE_POLL,
   DELETE_POLL,
   UPDATE_POLL,
-  EDIT_POLL
+  EDIT_POLL,
+  DELETE_POLL_OPTION,
+  DELETE_POLL_QUESTION
 } from "./../actions/index";
 
 const defaultState = {
@@ -20,7 +22,7 @@ const defaultState = {
 
 const initialState = defineState(defaultState)("polls");
 export default (state = initialState, actions) => {
-  console.log("actions--->", actions);
+  console.log("dashboard state--->",JSON.stringify(state), actions);
   switch (actions.type) {
     case GET_POLL_ANALYTICS:
       return {
@@ -49,6 +51,7 @@ export default (state = initialState, actions) => {
       let pollsAnalytics = state.pollsAnalytics[actions.index];
       if (!("expanded" in pollsAnalytics)) {
         pollsAnalytics.expanded = false;
+        console.log("dashboard Reducers---> TOGGLE_POLL", JSON.stringify(state));
       }
       pollsAnalytics.expanded = !pollsAnalytics.expanded;
       return {
@@ -70,6 +73,16 @@ export default (state = initialState, actions) => {
         ...state,
         editDetails : actions.data,
         editPoll: []
+      };
+      case DELETE_POLL_OPTION:
+      return {
+        ...state,
+        deleteOptionDetails : actions.data,
+      };
+      case DELETE_POLL_QUESTION:
+      return {
+        ...state,
+        deleteQuestionDetails : actions.data,
       };
     default:
       return {
