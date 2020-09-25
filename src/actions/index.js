@@ -50,6 +50,15 @@ export const deletePollQuestionAction = data => {
   return { type: DELETE_POLL_QUESTION, data };
 };
 
+export const createPoll = createPollData => {
+  return async dispatch => {
+    //API call
+    let pollDetails = await postData(`/polls`,createPollData);
+    const pollData = pollDetails.data ? pollDetails.data : [];
+    dispatch(createPollAction({ pollData }));
+  };
+};
+
 export const getPoll = pollId => {
   return async dispatch => {
     //API call
@@ -74,6 +83,7 @@ export const togglePoll = index => {
 export const deletePoll = uuid => {
   return async dispatch => {
     let deletedPoll = await deleteData(`/polls/${uuid}`);
+    console.log("DELETEEEEEEETTTTTTTTTTEEEEEE-POOLLL-->",JSON.stringify(deletedPoll.data));
     dispatch(deletePollAction(deletedPoll.data));
   };
 };
@@ -121,7 +131,7 @@ export const deletePollOption = optionId => {
         statusText: deletedPollOption.statusText,
         data: deletedPollOption.data ? deletedPollOption.data : {}
       };
-
+      console.log("DELETEEEEEEETTTTTTTTTTEEEEEE-OOOOOOOOOOOPPPPPPPPPPPPP-POOLLL-->",JSON.stringify(deleteOptionDetails));
       dispatch(deletePollOptionAction(deleteOptionDetails));
     }
   };
@@ -143,7 +153,7 @@ export const deletePollQuestion = questionId => {
         statusText: deletedPollQuestion.statusText,
         data: deletedPollQuestion.data ? deletedPollQuestion.data : {}
       };
-
+      console.log("DELETEEEEEEETTTTTTTTTTEEEEEE-QQQQQQQQQQQQQQQQQQUUUUUUUUUUUUU-POOLLL-->",JSON.stringify(deleteQuestionDetails));
       dispatch(deletePollQuestionAction(deleteQuestionDetails));
     }
   };

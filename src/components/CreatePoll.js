@@ -1,7 +1,8 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
-import _ from 'lodash';
+import _ from "lodash";
 import "./css/CreatePoll.css";
+import { createPoll } from "./../actions";
 import {
   Divider,
   Form,
@@ -18,10 +19,10 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import OptionForm from "./OptionForm";
 import axios from "axios";
 import moment from "moment";
-import {BASE_URL} from './../constants/appConfig';
-import fbIcon from './../icons/fbIcon.png';
-import instagramIcon from './../icons/instagramIcon.png';
-import twitterIcon from './../icons/twitterIcon.png'
+import { BASE_URL } from "./../constants/appConfig";
+import fbIcon from "./../icons/fbIcon.png";
+import instagramIcon from "./../icons/instagramIcon.png";
+import twitterIcon from "./../icons/twitterIcon.png";
 const { TextArea } = Input;
 
 class CreatePoll extends Component {
@@ -29,21 +30,36 @@ class CreatePoll extends Component {
     super(props);
     this.state = {
       modalVisible: false,
-      modalTitle: ''
+      modalTitle: ""
     };
   }
-  componentDidMount(){
-    console.log('componentDidMount==>',this.props)
+  componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
     if (accessToken === "") {
-        this.props.history.push("/login");
+      this.props.history.push("/login");
     }
-    let poll_id = this.props.match.params.pollId !== undefined ? this.props.match.params.pollId : '';
+    let poll_id =
+      this.props.match.params.pollId !== undefined
+        ? this.props.match.params.pollId
+        : "";
   }
-
-  componentDidUpdate(){
-    console.log('componentDidUpdate==>',this.props)
+  componentWillReceiveProps(nextProps) {
+    let prevUuid = (this.props.polls.poll) ? this.props.polls.poll.uuid : undefined;
+    if (nextProps.polls.poll.uuid !== prevUuid) {
+      let modalData = {
+        title: nextProps.polls.poll.title,
+        uuid: nextProps.polls.poll.uuid
+      };
+      if (nextProps.polls.poll.status === "published") {
+        this.showModal(modalData);
+        message.success("Poll created successfully");
+      } else {
+        this.formRef.current.resetFields();
+        message.success("Poll Drafted successfully");
+      }
+    }
   }
+  componentDidUpdate() {}
 
   formItemLayout = {
     labelCol: {
@@ -66,29 +82,36 @@ class CreatePoll extends Component {
   formRef = createRef();
 
   savePoll(pollData) {
-    console.log('SavePolls--->',pollData);
     let start_date = pollData.start_date.unix();
     let end_date = pollData.end_date.unix();
     let status = pollData.status;
-    if(status !== '' && status === 'published'){
-      console.log('inside published');
-      let {questions} = pollData;
-      if(_.isNil(questions) || Object.keys(questions).length == 0){
-        console.log('Questons error');
-        message.error('Atleast one question is required to publish poll');
+    if (status !== "" && status === "published") {
+      let { questions } = pollData;
+      if (_.isNil(questions) || Object.keys(questions).length == 0) {
+        message.error("Atleast one question is required to publish poll");
         return false;
       }
-      if(!_.isNil(questions) && Object.keys(questions).length){
-        for(let i = 0; i < Object.keys(questions).length; i++){
-          if(_.isNil(questions[i].options) || Object.keys(questions[i].options).length == 0){
-            message.error('Options are missing');
+      if (!_.isNil(questions) && Object.keys(questions).length) {
+        for (let i = 0; i < Object.keys(questions).length; i++) {
+          if (
+            _.isNil(questions[i].options) ||
+            Object.keys(questions[i].options).length == 0
+          ) {
+            message.error("Options are missing");
             return false;
           }
         }
       }
     }
     //return false;
-    let accessToken = sessionStorage.getItem("accessToken");
+    let params = {
+      ...pollData,
+      start_date,
+      end_date
+    };
+
+    this.props.createPollAction(params);
+    /* let accessToken = sessionStorage.getItem("accessToken");
     axios.defaults.headers.common["Authorization"] =`Bearer ${accessToken}`;
     axios
       .post(`http://localhost:3030/polls/`, {
@@ -110,13 +133,13 @@ class CreatePoll extends Component {
           this.formRef.current.resetFields();
           message.success('Poll Drafted successfully');
         }
-      });
+      }); */
   }
-  showModal = (modalData) => {
+  showModal = modalData => {
     this.setState({
       modalVisible: true,
-      modalTitle : modalData.title || '',
-      uuid : modalData.uuid,
+      modalTitle: modalData.title || "",
+      uuid: modalData.uuid
     });
   };
   handleOk = e => {
@@ -124,7 +147,7 @@ class CreatePoll extends Component {
     this.formRef.current.resetFields();
     this.setState({
       modalVisible: false,
-      modalTitle:''
+      modalTitle: ""
     });
   };
 
@@ -195,7 +218,7 @@ class CreatePoll extends Component {
           {/* This is the Dynamic questions Adder */}
           <Form.List name="questions">
             {(fields, { add, remove }) => {
-              console.log('')
+              console.log("");
               return (
                 <div>
                   {fields.map((field, index) => (
@@ -220,7 +243,7 @@ class CreatePoll extends Component {
                               //margin: "8px 0",
                               boxSizing: "border-box"
                             }}
-                            placeholder={"Question "+ (index+1)}
+                            placeholder={"Question " + (index + 1)}
                           />
                           <MinusCircleOutlined
                             style={{
@@ -235,7 +258,7 @@ class CreatePoll extends Component {
 
                       {/* This is the Dynamic options Adder */}
 
-                      <Form.Item style={{marginLeft: "2em"}}>
+                      <Form.Item style={{ marginLeft: "2em" }}>
                         <OptionForm fieldKey={field.key} />
                       </Form.Item>
 
@@ -245,14 +268,16 @@ class CreatePoll extends Component {
                         fieldKey={[field.fieldKey, "type"]}
                         label="Type"
                         initialValue={0}
-                        style={{marginLeft: "2em"}}
+                        style={{ marginLeft: "2em" }}
                       >
-                        <Radio.Group style={{
-                          width: "100%",
-                          padding: "5px 10px",
-                          margin: "8px 0",
-                          boxSizing: "border-box"
-                        }}>
+                        <Radio.Group
+                          style={{
+                            width: "100%",
+                            padding: "5px 10px",
+                            margin: "8px 0",
+                            boxSizing: "border-box"
+                          }}
+                        >
                           <Radio.Button value={0}>Single</Radio.Button>
                           <Radio.Button value={1}>Multiple</Radio.Button>
                         </Radio.Group>
@@ -328,12 +353,16 @@ class CreatePoll extends Component {
               />
             </Form.Item>
           </Row>
-          <Form.Item name="status" className="collection-create-form_last-form-item" initialValue='draft'>
-          <Radio.Group>
-            <Radio value="draft">Save as draft</Radio>
-            <Radio value="published">Publish</Radio>
-          </Radio.Group>
-        </Form.Item>
+          <Form.Item
+            name="status"
+            className="collection-create-form_last-form-item"
+            initialValue="draft"
+          >
+            <Radio.Group>
+              <Radio value="draft">Save as draft</Radio>
+              <Radio value="published">Publish</Radio>
+            </Radio.Group>
+          </Form.Item>
 
           {/* <FormAction> */}
           <div className="inner-wrapper">
@@ -343,32 +372,42 @@ class CreatePoll extends Component {
           </div>
           {/* </FormAction> */}
         </Form>
-      <Modal
-        title={this.state.modalTitle}
-        centered
-        visible={this.state.modalVisible}
-        onOk={this.handleOk}
-        cancelButtonProps={{ display: 'none' }}
-        width={300}
-      >
-      <div style={{textAlign:'center'}}>
-        <deckgo-qrcode content={`${BASE_URL}/submit-poll/${this.state.uuid}`}></deckgo-qrcode>
-        <div className='pollUrl'>{`${BASE_URL}/submit-poll/${this.state.uuid}`}</div>
-        <div className='padding10'>{`Poll Code - ${this.state.uuid}`}</div>
-        {/* <div className="icons">
+        <Modal
+          title={this.state.modalTitle}
+          centered
+          visible={this.state.modalVisible}
+          onOk={this.handleOk}
+          cancelButtonProps={{ display: "none" }}
+          width={300}
+        >
+          <div style={{ textAlign: "center" }}>
+            <deckgo-qrcode
+              content={`${BASE_URL}/submit-poll/${this.state.uuid}`}
+            ></deckgo-qrcode>
+            <div className="pollUrl">{`${BASE_URL}/submit-poll/${this.state.uuid}`}</div>
+            <div className="padding10">{`Poll Code - ${this.state.uuid}`}</div>
+            {/* <div className="icons">
           <img src={fbIcon} alt="share-facebook"/>
           <img src={instagramIcon} alt="share-instagram"/>
           <img src={twitterIcon} alt="share-twitter"/>
         </div> */}
-      </div>
-      </Modal>
+          </div>
+        </Modal>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { ...state };
+  return {
+    polls: state.dashboard.polls
+  };
+};
+const mapDispatchToProps = {
+  createPollAction: createPoll
 };
 
-export default connect(mapStateToProps)(CreatePoll);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreatePoll);

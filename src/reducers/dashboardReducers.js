@@ -22,7 +22,7 @@ const defaultState = {
 
 const initialState = defineState(defaultState)("polls");
 export default (state = initialState, actions) => {
-  console.log("dashboard state--->",JSON.stringify(state), actions);
+  console.log("^^^^^^^^^^^dashboard state--->",JSON.stringify(state), actions);
   switch (actions.type) {
     case GET_POLL_ANALYTICS:
       return {
@@ -36,7 +36,8 @@ export default (state = initialState, actions) => {
       };
     case CREATE_POLL:
       return {
-        ...state
+        ...state,
+        polls : actions.data.pollData
       };
     case GET_POLL:
       return {
