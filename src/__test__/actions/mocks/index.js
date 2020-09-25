@@ -243,3 +243,112 @@ export const deleteQuestion = {
   statusText: "OK",
   data: "Option 38 deleted successfully"
 };
+
+export const getSubmitPoll = {
+  pollData: [
+    {
+      id: 32,
+      title: "Funny Icebreaker",
+      uuid: "GaQkVp",
+      description:
+        "Lighten your audience’s mood and start with a positive first impression. ",
+      user_id: 2,
+      status: "published",
+      start_date: 1600668627,
+      end_date: 1600841429,
+      user_required: null,
+      createdAt: "2020-09-21T06:10:58.000Z",
+      updatedAt: "2020-09-21T06:10:58.000Z",
+      questions: [
+        {
+          id: 61,
+          poll_id: 32,
+          question:
+            "If you could have one of these superpowers, which one would you choose?",
+          type: false,
+          createdAt: "2020-09-21T06:10:58.000Z",
+          updatedAt: "2020-09-21T06:10:58.000Z",
+          options: [
+            {
+              id: 144,
+              question_id: 61,
+              option: "Be invisible whenever you want",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 145,
+              question_id: 61,
+              option: "Superhuman Strength",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 146,
+              question_id: 61,
+              option: "Talk to animals",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 147,
+              question_id: 61,
+              option: "Read minds",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            }
+          ]
+        },
+        {
+          id: 62,
+          poll_id: 32,
+          question: "Which Harry Potter house do you belong in?",
+          type: true,
+          createdAt: "2020-09-21T06:10:58.000Z",
+          updatedAt: "2020-09-21T06:10:58.000Z",
+          options: [
+            {
+              id: 148,
+              question_id: 62,
+              option: "Gryffindor",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 149,
+              question_id: 62,
+              option: "Slytherin",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 150,
+              question_id: 62,
+              option: "Ravenclaw",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            },
+            {
+              id: 151,
+              question_id: 62,
+              option: "Hufflepuff",
+              createdAt: "2020-09-21T06:10:58.000Z",
+              updatedAt: "2020-09-21T06:10:58.000Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+export const submitPollData = {
+  voteDetails: {
+    errorCode: 0,
+    status: 200,
+    statusText: "OK",
+    data: {
+      message: "Your response is successfully submitted."
+    }
+  }
+};

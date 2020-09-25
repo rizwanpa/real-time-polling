@@ -11,7 +11,6 @@ const defaultState = {
 
 const initialState = defineState(defaultState)("PollForVote");
 export default (state = initialState, actions) => {
-  console.log('REDUCERS===>',actions);
   switch (actions.type) {
     case GET_POLL_BY_UUID:
       return {

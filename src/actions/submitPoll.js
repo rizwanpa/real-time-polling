@@ -43,10 +43,10 @@ export const submitPollVote = voteObj => {
         statusText: voteResponse.statusText,
         data: voteResponse.data ? voteResponse.data : {}
       };
-
+      
     }
-    console.log("submitPollVOte--->", voteResponse, voteDetails);
     //const pollData = voteResponse.data ? voteResponse.data : [];
+    console.log('========submitPollVote------------>',JSON.stringify({ voteDetails }));
     dispatch(submitPollVoteAction({ voteDetails }));
   };
 };
