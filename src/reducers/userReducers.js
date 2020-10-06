@@ -14,7 +14,6 @@ const defaultState = {
 
 const initialState = defineState(defaultState)("userDetails");
 export default (state = initialState, actions) => {
-  console.log('userReducers==>',actions);
   switch (actions.type) {
     case SET_SESSION:
       return {

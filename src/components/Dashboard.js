@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import "./css/Dashboard.css";
 import { getPollAnalytics, togglePoll, updatePoll } from "./../actions";
 import {HorizontalBar} from 'react-chartjs-2';
-import constants from '../constants/appConfig'
+import {SOCKET_PATH, BASE_URL,SOCKET_URL} from '../constants/appConfig'
 import io from 'socket.io-client'
-var socket = io(constants.API_SERVER);
+var socket = io(SOCKET_URL, {path: SOCKET_PATH});
 
 class Dashboard extends Component {
   constructor(props) {
@@ -17,23 +17,23 @@ class Dashboard extends Component {
   
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log('Dashboard----didMount session', accessToken);
    /*  if (accessToken === "" || accessToken === null) {
       this.props.history.push("/login");
     } else { */
+      let currentDateTime = Math.floor(Date.now()/1000);
       let params = {
         status: "published",
         sort: "",
         order: "",
         limit: 5,
-        fromDate: "",
-        endDate: "",
+        fromDate: currentDateTime,
+        endDate: currentDateTime,
         title: ""
       };
       this.props.getPollAnalyticsAction(params);
-      
+      console.log('sockrt io URL ---->',BASE_URL)
       socket.on('refresh-poll-list', (msg) => {
-        console.log('NEW SOCKET MESSAGE', msg);
+        console.log('refresh-poll-list-->',msg);
         this.props.updatePollAction(msg);
       });
     }
@@ -61,7 +61,6 @@ class Dashboard extends Component {
         data: [option.percentage]
       })
     })
-    console.log(data)
     return data;
   }
 
@@ -84,7 +83,6 @@ class Dashboard extends Component {
         enabled: true
       }
     }
-    console.log('Dashboard---->',this.props.pollsAnalytics);
 
     return (
       <div className="dashboard">
@@ -102,8 +100,8 @@ class Dashboard extends Component {
                     <p className="text-center">Questions</p>
                   </div>
                   <div className="responses">
-                    <p className="text-center">{poll.totalResponses}</p>  
-                    <p className="text-center">Responses</p>
+                    <p className="text-center">Code</p>
+                    <p className="text-center">{poll.uuid}</p>  
                   </div>
                 </div>
               </div>

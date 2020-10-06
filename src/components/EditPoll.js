@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
+import _ from "lodash";
 import { getPoll, editPoll, deletePollOption, deletePollQuestion } from "./../actions";
+import { BASE_URL } from "./../constants/appConfig";
 import {
   Divider,
   Form,
@@ -22,21 +24,18 @@ class EditPoll extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editPoll: []
+      editPoll: [],
+      modalVisible: false,
+      modalTitle: ""
     };
+    this.validation = 0;
   }
   componentDidMount() {
-    console.log(
-      "inside edit---componentDidMount",
-      this.props,
-      this.props.match.params.pollId
-    );
     if (this.props.match.params.pollId) {
       this.props.getPollAction(this.props.match.params.pollId);
     }
   }
   componentWillReceiveProps(nextProps) {
-    console.log("###############receiveProps==>", nextProps);
     this.setState({
       editPoll: nextProps.editPoll
     });
@@ -46,18 +45,17 @@ class EditPoll extends Component {
       nextProps.editPoll.length == 0
     ) {
       message.success(nextProps.editDetails.data);
-      this.props.history.push(`/polls`);
+      if(this.state.editPoll.status == "published"){
+        this.showModal();
+      }else{
+        this.props.history.push(`/polls`);
+      }
     } else {
       //message.error('OPPs something went wrong!');
     }
   }
-  componentDidUpdate() {
-    console.log("inside edit---componentDidUpdate", this.props, this.state);
-    if (this.props.match.params.uuid) {
-    }
-  }
+  //componentDidUpdate() {}
   onChangeHandledTitle = e => {
-    console.log("change tilte==>", e.target.name, e.target.value, e.target);
     let updateval = { [e.target.name]: e.target.value };
     this.setState(prevState => {
       let editPoll = Object.assign({}, prevState.editPoll); // creating copy of state variable editPoll
@@ -89,7 +87,6 @@ class EditPoll extends Component {
     });
   };
   onChangeType = (value, questionIndex) => {
-    console.log("onChageType===>", value, questionIndex);
     this.setState(prevState => {
       let editPoll = Object.assign({}, prevState.editPoll);
       editPoll.questions[questionIndex].type = value;
@@ -129,6 +126,32 @@ class EditPoll extends Component {
     });
   };
   updatePoll = () => {
+    let { title } = this.state.editPoll
+    if (title == '') {
+      return false;
+    }
+    if (this.validation) {
+      return false;
+    }
+    let { status } = this.state.editPoll
+    if (status !== "" && status === "published") {
+      let { questions } = this.state.editPoll;
+      if (_.isNil(questions) || Object.keys(questions).length == 0) {
+        message.error("Atleast one question is required to publish poll");
+        return false;
+      }
+      if (!_.isNil(questions) && Object.keys(questions).length) {
+        for (let i = 0; i < Object.keys(questions).length; i++) {
+          if (
+            _.isNil(questions[i].options) ||
+            Object.keys(questions[i].options).length == 0
+          ) {
+            message.error("Options are missing");
+            return false;
+          }
+        }
+      }
+    }
     this.props.editPollAction(this.state.editPoll);
   };
   onChangeStatus = value => {
@@ -141,41 +164,75 @@ class EditPoll extends Component {
       return { editPoll };
     });
   };
-  removeOption = (questionIndex, optionIndex) =>{
+  removeOption = (questionIndex, optionIndex) => {
     this.setState(prevState => {
       let editPoll = Object.assign({}, prevState.editPoll);
-      console.log('editPoll--->',editPoll.questions[questionIndex].options[optionIndex].id);
       let optionId = editPoll.questions[questionIndex].options[optionIndex].id;
-      if(optionId){
+      if (optionId) {
         this.props.deletePollOptionAction(optionId)
       }
       editPoll.questions[questionIndex].options.splice(optionIndex, 1)
       return { editPoll };
     });
   }
-  removeQuestion = (questionIndex) =>{
+  removeQuestion = (questionIndex) => {
     this.setState(prevState => {
       let editPoll = Object.assign({}, prevState.editPoll);
-      console.log('editPoll--->',editPoll.questions[questionIndex]);
       let questionId = editPoll.questions[questionIndex].id;
-      if(questionId){
+      if (questionId) {
         this.props.deletePollQuestionAction(questionId)
       }
       editPoll.questions.splice(questionIndex, 1)
       return { editPoll };
     });
   }
+  unixToTimestamp = (unix) => {
+    let a = new Date(unix * 1000);
+    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate();
+    let hour = a.getHours();
+    let min = a.getMinutes();
+    let sec = a.getSeconds();
+    let timestamp = date + '-' + month + '-' + year + ' ' + hour + ':' + min + ':' + sec;
+    return timestamp;
+  }
+  handleDatePickerChange = (date, dateString, name) => {
+    let updateDate = { [name]: date.unix() };
+    this.setState(prevState => {
+      let editPoll = Object.assign({}, prevState.editPoll); // creating copy of state variable editPoll
+      editPoll = {
+        ...editPoll,
+        ...updateDate
+      }; // update the name property, assign a new value
+      return { editPoll }; // return new object jasper object
+    })
+
+  }
+  showModal = () => {
+    this.setState({
+      modalVisible: true,
+      modalTitle:  this.state.editPoll.title,
+      uuid: this.state.editPoll.uuid
+    });
+  };
+  handleOk = e => {
+    this.setState({
+      modalVisible: false,
+      modalTitle: "",
+      uuid: ""
+    },()=>  this.props.history.push(`/polls`));
+  };
   render() {
-    console.log("edit render", this.state);
     let { editPoll } = this.state;
-    let startDate = moment
+    this.validation = 0;
+    /* let startDate = moment
       .unix(editPoll.start_date)
-      .format("YYYY-MM-DD HH:mm:ss");
-    console.log(
-      "0000000000000000",
-      moment.unix(editPoll.start_date).format("YYYY-MM-DD HH:mm:ss"),
-      startDate
-    );
+      .format("YYYY-MM-DD HH:mm:ss"); 
+    let startDate = this.unixToTimestamp(editPoll.start_date);
+    let endDate = this.unixToTimestamp(editPoll.end_date);
+    */
     return (
       <div style={{ width: "60%" }}>
         {/* Title */}
@@ -186,11 +243,12 @@ class EditPoll extends Component {
           id="title"
           name="title"
           type="text"
-          className="input-title"
+          className={editPoll.title != '' ? `input-title` : `input-title field-error`}
           value={editPoll.title}
           onChange={this.onChangeHandledTitle}
+          autoComplete="off"
         />
-
+        <div style={{ color: 'red', height: '5px' }}>{editPoll.title == '' ? "Please input poll title." : ""}</div>
         {/* description */}
         <label htmlFor="description" className="desc-title">
           Description
@@ -205,6 +263,7 @@ class EditPoll extends Component {
         />
         {editPoll.questions &&
           editPoll.questions.map((question, index) => {
+            this.validation = question.question == '' ? 1 : this.validation
             return (
               <>
                 <div className="questions" key={question.id}>
@@ -215,7 +274,8 @@ class EditPoll extends Component {
                       id={`question_${index}`}
                       name={`question_${question.id}`}
                       type="text"
-                      className="input-question input-title"
+                      autoComplete="off"
+                      className={question.question !== '' ? `input-question input-title` : `input-question input-title field-error`}
                       value={question.question}
                       index={index}
                       question_id={question.id}
@@ -236,8 +296,10 @@ class EditPoll extends Component {
                       />
                     </span>
                   </div>
+                  <div style={{ color: 'red', height: '10px' }}>{question.question == '' ? "Please input question." : ""}</div>
                   {question.options &&
                     question.options.map((option, optIndex) => {
+                      this.validation = option.option == '' ? 1 : this.validation;
                       return (
                         <div className="options" key={option.id}>
                           <div className="dispaly-flex">
@@ -245,7 +307,8 @@ class EditPoll extends Component {
                               id={`option_${option.id}`}
                               name={`option_${option.id}`}
                               type="text"
-                              className="input-question input-title"
+                              autoComplete="off"
+                              className={option.option !== '' ? `input-question input-title` : `input-question input-title field-error`}
                               value={option.option}
                               onChange={e =>
                                 this.onChangeHandledOption(
@@ -264,6 +327,7 @@ class EditPoll extends Component {
                               />
                             </span>
                           </div>
+                          <div style={{ color: 'red', height: '10px' }}>{option.option == '' ? "Please input option." : ""}</div>
                         </div>
                       );
                     })}
@@ -315,7 +379,11 @@ class EditPoll extends Component {
               }}
               showTime
               format="YYYY-MM-DD HH:mm:ss"
-              //defaultValue={moment(startDate, 'YYYY-MM-DD HH:mm:ss')}
+              disabledDate={(current) => current && current < moment()}
+              value={moment(moment
+                .unix(editPoll.start_date)
+                .format("YYYY-MM-DD HH:mm:ss"), "YYYY-MM-DD HH:mm:ss")}
+              onChange={(date, dateString) => this.handleDatePickerChange(date, dateString, 'start_date')}
             />
           </Col>
           <Col span={8}>
@@ -331,12 +399,16 @@ class EditPoll extends Component {
               }}
               showTime
               format="YYYY-MM-DD HH:mm:ss"
-              //defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
+              disabledDate={(current) => current && current < moment()}
+              value={moment(moment
+                .unix(editPoll.end_date)
+                .format("YYYY-MM-DD HH:mm:ss"), "YYYY-MM-DD HH:mm:ss")}
+              onChange={(date, dateString) => this.handleDatePickerChange(date, dateString, 'end_date')}
             />
           </Col>
         </Row>
         <Radio.Group
-          defaultValue={editPoll.status == "draft" ? "draft" : "published"}
+          value={editPoll.status == "draft" ? "draft" : "published"}
           size="small"
           buttonStyle="solid"
           onChange={e => this.onChangeStatus(e.target.value)}
@@ -349,12 +421,32 @@ class EditPoll extends Component {
             update Poll
           </Button>
         </div>
+        <Modal
+          title={this.state.modalTitle}
+          centered
+          visible={this.state.modalVisible}
+          onOk={this.handleOk}
+          cancelButtonProps={{ display: "none" }}
+          width={300}
+          footer={[
+            <Button key="back" onClick={this.handleOk}>
+              OK
+            </Button>
+          ]}
+        >
+          <div style={{ textAlign: "center" }}>
+            <deckgo-qrcode
+              content={`${BASE_URL}/submit-poll/${this.state.uuid}`}
+            ></deckgo-qrcode>
+            <div className="pollUrl">{`${BASE_URL}/submit-poll/${this.state.uuid}`}</div>
+            <div className="padding10">{`Poll Code - ${this.state.uuid}`}</div>
+          </div>
+        </Modal>
       </div>
     );
   }
 }
 const mapStateToProps = state => {
-  console.log("~~~~~~~~~~~~~edit-polls state--------", state);
   return {
     editPoll: state.dashboard.editPoll,
     editDetails: state.dashboard.editDetails

@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Index Component render() renders the component 1`] = `<Connect(Index) />`;

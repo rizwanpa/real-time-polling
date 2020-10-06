@@ -34,7 +34,6 @@ export const setSecurity = (data) => {
         
         sessionStorage.setItem('accessToken', accessToken);
         let user = accessToken !== '' ? jwt(accessToken): {};
-        console.log('setSecurity user Action--->',user);
         dispatch(setSecurityAction(user));
     }
 }

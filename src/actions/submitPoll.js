@@ -46,7 +46,6 @@ export const submitPollVote = voteObj => {
       
     }
     //const pollData = voteResponse.data ? voteResponse.data : [];
-    console.log('========submitPollVote------------>',JSON.stringify({ voteDetails }));
     dispatch(submitPollVoteAction({ voteDetails }));
   };
 };

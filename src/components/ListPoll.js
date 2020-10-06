@@ -40,58 +40,60 @@ class ListPoll extends Component {
     this.props.getPollAnalyticsAction(params);
   }
   componentDidUpdate(prevProps) {
-    console.log("componentDidUpdate", prevProps.deletedPollId, this.props.deletedPollId);
     if (prevProps.deletedPollId !== this.props.deletedPollId) {
       this.props.getPollAnalyticsAction(this.state.params);
     }
   }
 
   goToSurvey(poll) {
-    console.log(poll.uuid);
+    
   }
   delete(poll) {
-    console.log(poll.uuid);
     this.props.deletePollAction(poll.id);
   }
   toggleSurvey(index) {
     this.props.togglePollAction(index);
   }
   edit(poll) {
-    console.log(poll.uuid);
     //this.props.edt(poll.id);
     this.props.history.push(`/edit-poll/${poll.id}`);
   }
 
   render() {
+    let currentDateTime = Math.floor(Date.now()/1000);
     return (
       <div className="dashboard list">
         <div className="polls">
-          {this.props.pollsAnalytics.map((poll, index) =>
-            <div key={index}>
+          {this.props.pollsAnalytics.map((poll, index) =>{
+            let pollStatus = poll.status;
+            if(poll.end_date < currentDateTime){
+              pollStatus = 'completed';
+            }
+            return (<div key={index}>
               <div className={`poll ${poll.status}`} onClick={() => this.toggleSurvey(index)}>
                 <div className="poll-info">
                   <p> {poll.title}</p>
                   <p className="poll-desc">{poll.description}</p>
                 </div>
                 <div className="poll-status">
-                  {<Tag color={poll.status == 'published' ? 'green' : (poll.status == 'draft' ? 'cyan' : 'red')}>{poll.status}</Tag>}
+                  {<Tag color={pollStatus == 'published' ? 'green' : (pollStatus == 'draft' ? 'cyan' : 'red')}>{pollStatus}</Tag>}
                 </div>
                 <div className="poll-response">
                   <div className="questions">
                     <p className="text-center">{poll.questions.length}</p>
-                    <p>Questions</p>
+                    <p className="text-center">Questions</p>
                   </div>
-                  {/* <div className="responses">
-                    <p className="text-center">{poll.totalResponses?poll.totalResponses:0}</p>  
-                    <p>Responses</p>
-                  </div> */}
+                  <div className="responses">
+                    <p className="text-center">Code</p>
+                    <p className="text-center">{poll.uuid?poll.uuid:''}</p>  
+                  </div>
                 </div>
                 <div className="poll-actions">
                   <Button onClick={()=>this.edit(poll)} shape="circle" icon={<EditOutlined />} disabled={poll.status == 'draft' ? false : true} />
                   <Popconfirm
                     title="Are you sure delete this poll?"
                     onConfirm={()=>this.delete(poll)}
-                    onCancel={()=>{console.log('NO')}}
+                    //onCancel={()=>{console.log('NO')}}
                     okText="Yes"
                     cancelText="No"
                   >
@@ -112,7 +114,7 @@ class ListPoll extends Component {
                   </div>
                 )}
               </div>
-            </div>
+            </div>)}
           )}
         </div>
       </div>

@@ -14,7 +14,6 @@ export function login(url, params){
   return axios
   .post(url, params)
   .then(response=>{
-    console.log('utils resposne');
     axios.defaults.headers.common['Authorization'] = response.data.accessToken;
     return response;
   })

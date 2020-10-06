@@ -21,6 +21,10 @@ axios.interceptors.response.use(response => {
   // Edit response config
   return response;
 }, error => {
+  if(error.response.status === 401 || error.response.status === 403){
+    sessionStorage.removeItem('accessToken');
+    window.location = "/login";
+  }
   return Promise.reject(error);
 });
 

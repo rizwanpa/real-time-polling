@@ -51,7 +51,6 @@ export default (state = initialState, actions) => {
       let pollsAnalytics = state.pollsAnalytics[actions.index];
       if (!("expanded" in pollsAnalytics)) {
         pollsAnalytics.expanded = false;
-        console.log("dashboard Reducers---> TOGGLE_POLL", JSON.stringify(state));
       }
       pollsAnalytics.expanded = !pollsAnalytics.expanded;
       return {

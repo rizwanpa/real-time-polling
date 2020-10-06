@@ -57,3 +57,10 @@
 .login-background {
   min-height: 100%;
 }
+.logout{
+  float: right;
+  padding-right: 10px;
+  margin-right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}

@@ -143,7 +143,6 @@ class CreatePoll extends Component {
     });
   };
   handleOk = e => {
-    console.log(e);
     this.formRef.current.resetFields();
     this.setState({
       modalVisible: false,
@@ -218,7 +217,6 @@ class CreatePoll extends Component {
           {/* This is the Dynamic questions Adder */}
           <Form.List name="questions">
             {(fields, { add, remove }) => {
-              console.log("");
               return (
                 <div>
                   {fields.map((field, index) => (
@@ -244,6 +242,7 @@ class CreatePoll extends Component {
                               boxSizing: "border-box"
                             }}
                             placeholder={"Question " + (index + 1)}
+                            autoComplete="off"
                           />
                           <MinusCircleOutlined
                             style={{
@@ -379,6 +378,11 @@ class CreatePoll extends Component {
           onOk={this.handleOk}
           cancelButtonProps={{ display: "none" }}
           width={300}
+          footer={[
+            <Button key="back" onClick={this.handleOk}>
+              OK
+            </Button>
+          ]}
         >
           <div style={{ textAlign: "center" }}>
             <deckgo-qrcode

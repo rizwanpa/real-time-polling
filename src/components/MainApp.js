@@ -7,7 +7,8 @@ import {
   MenuFoldOutlined,
   HomeOutlined,
   AreaChartOutlined,
-  PieChartOutlined
+  PieChartOutlined,
+  LogoutOutlined
 } from "@ant-design/icons";
 import { getPoll } from "./../actions/index";
 import { history } from '../store';
@@ -29,7 +30,10 @@ class MainApp extends Component {
       collapsed: !this.state.collapsed
     });
   };
-
+  logout = () => {
+    sessionStorage.removeItem('accessToken');
+    this.props.history.push('/login');
+  }
   render() {
     let pathname = this.props.router.location.pathname;
     return (
@@ -59,6 +63,7 @@ class MainApp extends Component {
                     onClick: this.toggle
                   }
                 )}
+                <span className = "logout" onClick = {this.logout}><LogoutOutlined /></span>
               </Header>
               <Content
                 className="site-layout-background"

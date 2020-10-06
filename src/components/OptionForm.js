@@ -39,6 +39,7 @@ const OptionForm = props => {
                         boxSizing: "border-box"
                       }}
                       placeholder="Option"
+                      autoComplete="off"
                     />
                   </Form.Item>
                   <MinusCircleOutlined

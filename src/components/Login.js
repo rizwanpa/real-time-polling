@@ -13,7 +13,6 @@ class Login extends Component {
   };
   componentDidMount() {
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log("accessToken000", accessToken, accessToken !== null,accessToken !== "" && accessToken !== null && accessToken !== undefined);
     if (accessToken !== "" && accessToken !== null && accessToken !== undefined) {
        //this.props.history.push("/");
     }
@@ -25,11 +24,9 @@ class Login extends Component {
     //     this.props.history.push("/login");
   } */
   componentDidUpdate(prevProps) {
-    console.log("componentsDidUpdate prevProps--->", prevProps);
     let { username } = this.props.user !== undefined ? this.props.user : "";
     let { id } = this.props.user !== undefined ? this.props.user : "";
     let accessToken = sessionStorage.getItem("accessToken");
-    console.log("componentDidUpdate ==> accessToken000", accessToken);
     if (!accessToken) {
       message.error(MESSAGE.authError);
        //this.props.history.push("/login");
